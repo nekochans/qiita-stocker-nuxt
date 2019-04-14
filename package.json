@@ -4,7 +4,7 @@
   "description": "Mindexer Nuxt.js project",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon app/server/index.js --watch server",
+    "dev": "cross-env NODE_ENV=development nodemon",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node app/server/index.js",
     "generate": "nuxt generate",

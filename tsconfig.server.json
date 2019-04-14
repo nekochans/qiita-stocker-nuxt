@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "rootDir": "app",
+    "outDir": "dist"
+  },
+  "include": [
+    "app/server/index.ts"
+  ]
+}

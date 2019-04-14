@@ -1,6 +1,7 @@
+import NuxtConfiguration from '@nuxt/config'
 const pkg = require('./package')
 
-module.exports = {
+const nuxtConfig: NuxtConfiguration = {
   mode: 'universal',
   srcDir: 'app',
   /*
@@ -64,9 +65,10 @@ module.exports = {
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
+        if (!config.module) return
         config.module.rules.push({
           enforce: 'pre',
-          test: /\.(js|vue)$/,
+          test: /\.(js|ts|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
@@ -74,3 +76,5 @@ module.exports = {
     }
   }
 }
+
+export default nuxtConfig
