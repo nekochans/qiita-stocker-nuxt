@@ -1,7 +1,6 @@
+import express from 'express'
+import consola from 'consola'
 import config from '../../nuxt.config'
-
-const express = require('express')
-const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 config.dev = !(process.env.NODE_ENV === 'production')
