@@ -1,8 +1,12 @@
-import express from 'express'
+import express, { Router } from 'express'
 import consola from 'consola'
 import config from '../../nuxt.config'
+import weather from './api/weather'
+
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const router = Router()
+router.use(weather)
 config.dev = !(process.env.NODE_ENV === 'production')
 
 async function start() {
@@ -19,6 +23,7 @@ async function start() {
     await nuxt.ready()
   }
 
+  app.use('/api', router)
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
