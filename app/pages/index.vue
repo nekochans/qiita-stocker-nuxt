@@ -64,7 +64,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class Home extends Vue {}
+export default class index extends Vue {}
 </script>
 
 <style scoped>
