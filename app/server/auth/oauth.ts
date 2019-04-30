@@ -3,7 +3,7 @@ import * as qiita from '../domain/auth'
 
 const router = Router()
 
-router.get('/request', (req: any, res: any) => {
+router.get('/request', (req: Request, res: Response) => {
   const authorizationState = qiita.createAuthorizationState()
   const authorizationUrl = qiita.createAuthorizationUrl(authorizationState)
 
