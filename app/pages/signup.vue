@@ -29,7 +29,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class signup extends Vue {
+export default class extends Vue {
   isChecked: boolean = false
 
   onClickCheck() {
