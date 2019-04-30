@@ -9,3 +9,9 @@ export const clientSecret = (): string => {
     ? process.env.QIITA_CLIENT_SECRET
     : ''
 }
+
+export const apiUrlBase = (): string => {
+  return typeof process.env.API_URL_BASE === 'string'
+    ? process.env.API_URL_BASE
+    : ''
+}
