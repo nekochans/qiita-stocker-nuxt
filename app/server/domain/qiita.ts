@@ -1,9 +1,9 @@
 import url from 'url'
 import uuid from 'uuid'
-import QiitaApi from '../repositories/qiitaApi'
+import QiitaApiFactory from '../factroy/api/qiitaApiFactory'
 import { clientId, clientSecret } from '../constants/qiita'
 
-const qiitaApi = new QiitaApi()
+const qiitaApi = QiitaApiFactory.create()
 
 export interface IQiitaApi {
   issueAccessToken(
