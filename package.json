@@ -24,6 +24,7 @@
     "vue-property-decorator": "^8.1.0"
   },
   "devDependencies": {
+    "@nekonomokochan/aws-env-creator": "^2.0.0",
     "@nuxt/typescript": "^2.6.1",
     "@nuxtjs/eslint-config": "^0.0.1",
     "@types/cookie-parser": "^1.4.1",
