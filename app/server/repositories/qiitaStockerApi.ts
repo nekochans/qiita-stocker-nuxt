@@ -14,7 +14,7 @@ export default class QiitaStockerApi implements IQiitaStockerApi {
       .post<ICreateAccountResponse>(
         `${request.apiUrlBase}/api/accounts`,
         {
-          request: request.qiitaAccountId,
+          qiitaAccountId: request.qiitaAccountId,
           permanentId: request.permanentId,
           accessToken: request.accessToken
         },
