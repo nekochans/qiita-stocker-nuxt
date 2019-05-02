@@ -11,7 +11,11 @@
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
     "format": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
-    "test": "jest"
+    "test": "jest",
+    "createEnvrc:local": "DEPLOY_STAGE=local ts-node --project tsconfig.server.json createEnvrc.ts",
+    "createEnvrc:dev": "DEPLOY_STAGE=dev ts-node --project tsconfig.server.json createEnvrc.ts",
+    "createEnvrc:stg": "DEPLOY_STAGE=stg ts-node --project tsconfig.server.json createEnvrc.ts",
+    "createEnvrc:prod": "DEPLOY_STAGE=prod ts-node --project tsconfig.server.json createEnvrc.ts"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.4.1",
