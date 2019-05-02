@@ -10,11 +10,13 @@ export default class QiitaStockerApi implements IQiitaStockerApi {
   createAccount(
     request: ICreateAccountRequest
   ): Promise<ICreateAccountResponse> {
+    console.log(request)
+
     return axios
       .post<ICreateAccountResponse>(
         `${request.apiUrlBase}/api/accounts`,
         {
-          request: request.qiitaAccountId,
+          qiitaAccountId: request.qiitaAccountId,
           permanentId: request.permanentId,
           accessToken: request.accessToken
         },
