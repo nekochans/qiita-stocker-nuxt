@@ -39,7 +39,8 @@ const nuxtConfig: NuxtConfiguration = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma'
+    '@nuxtjs/bulma',
+    '@nuxtjs/markdownit'
   ],
   /*
    ** Axios module configuration
@@ -47,7 +48,14 @@ const nuxtConfig: NuxtConfiguration = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
   },
-
+  markdownit: {
+    injected: true,
+    breaks: true,
+    html: true,
+    linkify: true,
+    typography: true,
+    quotes: '“”‘’'
+  },
   /*
    ** Build configuration
    */

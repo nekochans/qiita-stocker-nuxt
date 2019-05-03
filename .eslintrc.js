@@ -25,6 +25,7 @@ module.exports = {
   rules: {
     'nuxt/no-cjs-in-config': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
-    'camelcase': 0
+    'camelcase': 0,
+    'vue/no-v-html': false
   }
 }
