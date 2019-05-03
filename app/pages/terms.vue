@@ -1,14 +1,14 @@
 <template>
-  <Signup />
+  <terms />
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Signup from '@/components/pages/signup.vue'
+import Terms from '@/components/pages/terms.vue'
 
 @Component({
   components: {
-    Signup
+    Terms
   }
 })
 export default class extends Vue {}
