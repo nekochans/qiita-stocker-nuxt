@@ -1397,6 +1397,11 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/universal-cookie@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/universal-cookie/-/universal-cookie-2.2.0.tgz#36fba91f8a8c64cfd109520d15ec2ec3f32561e9"
+  integrity sha512-fNgC782wfxAZZLDfFM70AgDzYh/VX7tH8NPl/fYNgoseXVLTg+vQf2zhzbWDlJiO0fKXwCL54HOKtXpjcV5C+A==
+
 "@types/uuid@^3.4.4":
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.4.tgz#7af69360fa65ef0decb41fd150bf4ca5c0cefdf5"
