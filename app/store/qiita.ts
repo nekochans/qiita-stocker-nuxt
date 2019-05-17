@@ -1,27 +1,27 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { RootState } from '@/store'
 
-export interface IQiitaState {
+export type QiitaState = {
   sessionId: string
 }
 
-export const state = (): IQiitaState => ({
+export const state = (): QiitaState => ({
   sessionId: ''
 })
 
-export const getters: GetterTree<IQiitaState, RootState> = {
+export const getters: GetterTree<QiitaState, RootState> = {
   isLoggedIn: (state): boolean => {
     return !!state.sessionId
   }
 }
 
-export const mutations: MutationTree<IQiitaState> = {
+export const mutations: MutationTree<QiitaState> = {
   saveSessionId: (state, sessionId: string) => {
     state.sessionId = sessionId
   }
 }
 
-export const actions: ActionTree<IQiitaState, RootState> = {
+export const actions: ActionTree<QiitaState, RootState> = {
   saveSessionId: ({ commit }, sessionId: string) => {
     commit('saveSessionId', sessionId)
   }
