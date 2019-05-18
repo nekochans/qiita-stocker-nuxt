@@ -1,22 +1,22 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { IQiitaApi } from '@/server/domain/qiitaApiinterface'
+import { Api } from '@/server/domain/qiitaApiinterface'
 import {
-  IIssueAccessTokensRequest,
-  IIssueAccessTokensResponse,
-  IFetchAuthenticatedUserResponse,
-  IFetchAuthenticatedUserRequest
+  IssueAccessTokensRequest,
+  IssueAccessTokensResponse,
+  FetchAuthenticatedUserResponse,
+  FetchAuthenticatedUserRequest
 } from '@/server/domain/auth'
 
-export default class QiitaApi implements IQiitaApi {
+export default class QiitaApi implements Api {
   /**
    * @param request
    * @return {Promise<any | never>}
    */
   issueAccessToken(
-    request: IIssueAccessTokensRequest
-  ): Promise<IIssueAccessTokensResponse> {
+    request: IssueAccessTokensRequest
+  ): Promise<IssueAccessTokensResponse> {
     return axios
-      .post<IIssueAccessTokensResponse>(
+      .post<IssueAccessTokensResponse>(
         `https://qiita.com/api/v2/access_tokens`,
         request
       )
@@ -33,10 +33,10 @@ export default class QiitaApi implements IQiitaApi {
    * @return {Promise<any | never>}
    */
   fetchAuthenticatedUser(
-    request: IFetchAuthenticatedUserRequest
-  ): Promise<IFetchAuthenticatedUserResponse> {
+    request: FetchAuthenticatedUserRequest
+  ): Promise<FetchAuthenticatedUserResponse> {
     return axios
-      .get<IFetchAuthenticatedUserResponse>(
+      .get<FetchAuthenticatedUserResponse>(
         `https://qiita.com/api/v2/authenticated_user`,
         {
           headers: { Authorization: `Bearer ${request.accessToken}` }

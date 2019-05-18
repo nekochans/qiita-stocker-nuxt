@@ -1,17 +1,15 @@
 import axios, { AxiosResponse } from 'axios'
-import { IQiitaStockerApi } from '@/server/domain/qiitaStockerApiinterface'
+import { Api } from '@/server/domain/qiitaStockerApiinterface'
 import {
-  ICreateAccountRequest,
-  ICreateAccountResponse,
+  CreateAccountRequest,
+  CreateAccountResponse,
   IQiitaStockerError
 } from '@/server/domain/auth'
 
-export default class QiitaStockerApi implements IQiitaStockerApi {
-  createAccount(
-    request: ICreateAccountRequest
-  ): Promise<ICreateAccountResponse> {
+export default class QiitaStockerApi implements Api {
+  createAccount(request: CreateAccountRequest): Promise<CreateAccountResponse> {
     return axios
-      .post<ICreateAccountResponse>(
+      .post<CreateAccountResponse>(
         `${request.apiUrlBase}/api/accounts`,
         {
           qiitaAccountId: request.qiitaAccountId,

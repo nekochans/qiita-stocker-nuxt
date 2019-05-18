@@ -35,6 +35,12 @@ router.get('/callback', async (req: Request, res: Response) => {
 
   try {
     const createAccountResponse = await qiita.fetchUser(req.query.code)
+    res.clearCookie('authorizationState')
+    res.cookie('sessionId', createAccountResponse._embedded.sessionId, {
+      path: '/',
+      httpOnly: true
+    })
+
     return res.status(200).json({ code: createAccountResponse.accountId })
   } catch (error) {
     return res

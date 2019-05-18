@@ -1,8 +1,8 @@
 import QiitaStockerApi from '../../repositories/qiitaStockerApi'
-import { IQiitaStockerApi } from '../../domain/qiitaStockerApiinterface'
+import { Api } from '../../domain/qiitaStockerApiinterface'
 
 export default class QiitaStockerApiFactory {
-  static create(): IQiitaStockerApi {
+  static create(): Api {
     return new QiitaStockerApi()
   }
 }

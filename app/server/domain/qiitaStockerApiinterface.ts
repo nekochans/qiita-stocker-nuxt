@@ -1,8 +1,8 @@
 import {
-  ICreateAccountRequest,
-  ICreateAccountResponse
+  CreateAccountRequest,
+  CreateAccountResponse
 } from '@/server/domain/auth'
 
-export interface IQiitaStockerApi {
-  createAccount(request: ICreateAccountRequest): Promise<ICreateAccountResponse>
+export type Api = {
+  createAccount(request: CreateAccountRequest): Promise<CreateAccountResponse>
 }

@@ -8,44 +8,44 @@ import { clientId, clientSecret, apiUrlBase } from '../constants/envConstant.ts'
 const qiitaApi = QiitaApiFactory.create()
 const qiitaStockerApi = QiitaStockerpiFactory.create()
 
-interface IQiitaStockerErrorData {
+type QiitaStockerErrorData = {
   code: number
   message: string
 }
 
-export interface IQiitaStockerError extends AxiosError {
-  response: AxiosResponse<IQiitaStockerErrorData>
+export type IQiitaStockerError = AxiosError & {
+  response: AxiosResponse<QiitaStockerErrorData>
 }
 
-export interface IIssueAccessTokensRequest {
+export type IssueAccessTokensRequest = {
   client_id: string
   client_secret: string
   code: string
 }
 
-export interface IIssueAccessTokensResponse {
+export type IssueAccessTokensResponse = {
   client_id: string
   scopes: string[]
   token: string
 }
 
-export interface IFetchAuthenticatedUserRequest {
+export type FetchAuthenticatedUserRequest = {
   accessToken: string
 }
 
-export interface IFetchAuthenticatedUserResponse {
+export type FetchAuthenticatedUserResponse = {
   id: string
   permanent_id: string
 }
 
-export interface ICreateAccountRequest {
+export type CreateAccountRequest = {
   apiUrlBase: string
   qiitaAccountId: string
   permanentId: string
   accessToken: string
 }
 
-export interface ICreateAccountResponse {
+export type CreateAccountResponse = {
   accountId: string
   _embedded: { sessionId: string }
 }
@@ -80,33 +80,33 @@ export const createAuthorizationUrl = (authorizationState: string): string => {
  */
 export const fetchUser = async (
   authorizationCode: string
-): Promise<ICreateAccountResponse> => {
-  const issueAccessTokensRequest: IIssueAccessTokensRequest = {
+): Promise<CreateAccountResponse> => {
+  const issueAccessTokensRequest: IssueAccessTokensRequest = {
     client_id: clientId(),
     client_secret: clientSecret(),
     code: authorizationCode
   }
 
-  const issueAccessTokenResponse: IIssueAccessTokensResponse = await qiitaApi.issueAccessToken(
+  const issueAccessTokenResponse: IssueAccessTokensResponse = await qiitaApi.issueAccessToken(
     issueAccessTokensRequest
   )
 
-  const fetchAuthenticatedUserRequest: IFetchAuthenticatedUserRequest = {
+  const fetchAuthenticatedUserRequest: FetchAuthenticatedUserRequest = {
     accessToken: issueAccessTokenResponse.token
   }
 
-  const authenticatedUser: IFetchAuthenticatedUserResponse = await qiitaApi.fetchAuthenticatedUser(
+  const authenticatedUser: FetchAuthenticatedUserResponse = await qiitaApi.fetchAuthenticatedUser(
     fetchAuthenticatedUserRequest
   )
 
-  const createAccountRequest: ICreateAccountRequest = {
+  const createAccountRequest: CreateAccountRequest = {
     apiUrlBase: apiUrlBase(),
     qiitaAccountId: authenticatedUser.id,
     permanentId: authenticatedUser.permanent_id,
     accessToken: issueAccessTokenResponse.token
   }
 
-  const createAccountResponse: ICreateAccountResponse = await qiitaStockerApi.createAccount(
+  const createAccountResponse: CreateAccountResponse = await qiitaStockerApi.createAccount(
     createAccountRequest
   )
   return createAccountResponse

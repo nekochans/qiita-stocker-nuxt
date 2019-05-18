@@ -4,6 +4,9 @@ const pkg = require('./package')
 const nuxtConfig: NuxtConfiguration = {
   mode: 'universal',
   srcDir: 'app',
+  router: {
+    middleware: ['authCookie', 'redirect']
+  },
   /*
    ** Headers of the page
    */

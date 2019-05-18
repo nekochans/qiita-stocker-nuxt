@@ -1,15 +1,15 @@
 import {
-  IFetchAuthenticatedUserRequest,
-  IFetchAuthenticatedUserResponse,
-  IIssueAccessTokensRequest,
-  IIssueAccessTokensResponse
+  FetchAuthenticatedUserRequest,
+  FetchAuthenticatedUserResponse,
+  IssueAccessTokensRequest,
+  IssueAccessTokensResponse
 } from '@/server/domain/auth'
 
-export interface IQiitaApi {
+export type Api = {
   issueAccessToken(
-    request: IIssueAccessTokensRequest
-  ): Promise<IIssueAccessTokensResponse>
+    request: IssueAccessTokensRequest
+  ): Promise<IssueAccessTokensResponse>
   fetchAuthenticatedUser(
-    request: IFetchAuthenticatedUserRequest
-  ): Promise<IFetchAuthenticatedUserResponse>
+    request: FetchAuthenticatedUserRequest
+  ): Promise<FetchAuthenticatedUserResponse>
 }
