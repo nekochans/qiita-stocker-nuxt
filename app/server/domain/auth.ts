@@ -8,12 +8,14 @@ import { clientId, clientSecret, apiUrlBase } from '../constants/envConstant.ts'
 const qiitaApi = QiitaApiFactory.create()
 const qiitaStockerApi = QiitaStockerpiFactory.create()
 
+export type accountAction = 'signUp' | 'login'
+
 type QiitaStockerErrorData = {
   code: number
   message: string
 }
 
-export type IQiitaStockerError = AxiosError & {
+export type QiitaStockerError = AxiosError & {
   response: AxiosResponse<QiitaStockerErrorData>
 }
 
@@ -50,6 +52,17 @@ export type CreateAccountResponse = {
   _embedded: { sessionId: string }
 }
 
+export type IssueLoginSessionRequest = {
+  apiUrlBase: string
+  qiitaAccountId: string
+  permanentId: string
+  accessToken: string
+}
+
+export type IssueLoginSessionResponse = {
+  sessionId: string
+}
+
 /**
  * @return {string}
  */
@@ -76,18 +89,20 @@ export const createAuthorizationUrl = (authorizationState: string): string => {
 
 /**
  * @param authorizationCode
- * @return {Promise<ICreateAccountResponse>}
+ * @param accountAction
+ * @return {Promise<string>}
  */
-export const fetchUser = async (
-  authorizationCode: string
-): Promise<CreateAccountResponse> => {
+export const fetchSessionId = async (
+  authorizationCode: string,
+  accountAction: accountAction
+): Promise<string> => {
   const issueAccessTokensRequest: IssueAccessTokensRequest = {
     client_id: clientId(),
     client_secret: clientSecret(),
     code: authorizationCode
   }
 
-  const issueAccessTokenResponse: IssueAccessTokensResponse = await qiitaApi.issueAccessToken(
+  const issueAccessTokenResponse = await qiitaApi.issueAccessToken(
     issueAccessTokensRequest
   )
 
@@ -95,19 +110,60 @@ export const fetchUser = async (
     accessToken: issueAccessTokenResponse.token
   }
 
-  const authenticatedUser: FetchAuthenticatedUserResponse = await qiitaApi.fetchAuthenticatedUser(
+  const authenticatedUser = await qiitaApi.fetchAuthenticatedUser(
     fetchAuthenticatedUserRequest
   )
 
+  let sessionId = ''
+
+  switch (accountAction) {
+    case 'signUp':
+      sessionId = await createAccount(
+        issueAccessTokenResponse.token,
+        authenticatedUser
+      )
+      break
+    case 'login':
+      sessionId = await issueLoginSession(
+        issueAccessTokenResponse.token,
+        authenticatedUser
+      )
+      break
+  }
+  return sessionId
+}
+
+const createAccount = async (
+  token: string,
+  authenticatedUser: FetchAuthenticatedUserResponse
+): Promise<string> => {
   const createAccountRequest: CreateAccountRequest = {
     apiUrlBase: apiUrlBase(),
     qiitaAccountId: authenticatedUser.id,
     permanentId: authenticatedUser.permanent_id,
-    accessToken: issueAccessTokenResponse.token
+    accessToken: token
   }
 
-  const createAccountResponse: CreateAccountResponse = await qiitaStockerApi.createAccount(
+  const createAccountResponse = await qiitaStockerApi.createAccount(
     createAccountRequest
   )
-  return createAccountResponse
+
+  return createAccountResponse._embedded.sessionId
+}
+
+const issueLoginSession = async (
+  token: string,
+  authenticatedUser: FetchAuthenticatedUserResponse
+): Promise<string> => {
+  const issueLoginSessionRequest: IssueLoginSessionRequest = {
+    apiUrlBase: apiUrlBase(),
+    qiitaAccountId: authenticatedUser.id,
+    permanentId: authenticatedUser.permanent_id,
+    accessToken: token
+  }
+
+  const issueLoginSessionResponse = await qiitaStockerApi.issueLoginSession(
+    issueLoginSessionRequest
+  )
+  return issueLoginSessionResponse.sessionId
 }

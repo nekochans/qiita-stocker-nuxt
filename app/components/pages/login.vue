@@ -2,7 +2,7 @@
   <main>
     <div class="container has-text-centered">
       <h1 class="title">ログイン</h1>
-      <a href="/oauth/request" class="button is-outlined">
+      <a href="/oauth/request/login" class="button is-outlined">
         Qiitaアカウントでログイン
       </a>
       <h2 class="is-size-7 login-guide">

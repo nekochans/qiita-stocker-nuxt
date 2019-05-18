@@ -10,7 +10,7 @@
         に同意します。
       </h2>
       <a
-        href="/oauth/request"
+        href="/oauth/request/signup"
         class="button is-outlined signup-margin"
         :disabled="!isChecked"
       >

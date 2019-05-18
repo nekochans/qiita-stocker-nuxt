@@ -3,7 +3,9 @@ import { Api } from '@/server/domain/qiitaStockerApiinterface'
 import {
   CreateAccountRequest,
   CreateAccountResponse,
-  IQiitaStockerError
+  QiitaStockerError,
+  IssueLoginSessionRequest,
+  IssueLoginSessionResponse
 } from '@/server/domain/auth'
 
 export default class QiitaStockerApi implements Api {
@@ -25,7 +27,32 @@ export default class QiitaStockerApi implements Api {
       .then((axiosResponse: AxiosResponse) => {
         return Promise.resolve(axiosResponse.data)
       })
-      .catch((axiosError: IQiitaStockerError) => {
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError)
+      })
+  }
+
+  issueLoginSession(
+    request: IssueLoginSessionRequest
+  ): Promise<IssueLoginSessionResponse> {
+    return axios
+      .post<IssueLoginSessionResponse>(
+        `${request.apiUrlBase}/api/login-sessions`,
+        {
+          qiitaAccountId: request.qiitaAccountId,
+          permanentId: request.permanentId,
+          accessToken: request.accessToken
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then((axiosResponse: AxiosResponse) => {
+        return Promise.resolve(axiosResponse.data)
+      })
+      .catch((axiosError: QiitaStockerError) => {
         return Promise.reject(axiosError)
       })
   }
