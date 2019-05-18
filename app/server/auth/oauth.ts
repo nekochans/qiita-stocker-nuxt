@@ -2,17 +2,20 @@ import { Router, Request, Response } from 'express'
 import * as qiita from '../domain/auth'
 
 const router = Router()
+const COOKIE_AUTH_STATE = 'authorizationState'
+const COOKIE_ACCOUNT_ACTION = 'accountAction'
+const COOKIE_SESSION_ID = 'sessionId'
 
 router.get('/request/signup', (req: Request, res: Response) => {
   const authorizationState = qiita.createAuthorizationState()
   const authorizationUrl = qiita.createAuthorizationUrl(authorizationState)
 
-  res.cookie('authorizationState', authorizationState, {
+  res.cookie(COOKIE_AUTH_STATE, authorizationState, {
     path: '/',
     httpOnly: true
   })
 
-  res.cookie('accountAction', 'signUp', {
+  res.cookie(COOKIE_ACCOUNT_ACTION, 'signUp', {
     path: '/',
     httpOnly: true
   })
@@ -24,12 +27,12 @@ router.get('/request/login', (req: Request, res: Response) => {
   const authorizationState = qiita.createAuthorizationState()
   const authorizationUrl = qiita.createAuthorizationUrl(authorizationState)
 
-  res.cookie('authorizationState', authorizationState, {
+  res.cookie(COOKIE_AUTH_STATE, authorizationState, {
     path: '/',
     httpOnly: true
   })
 
-  res.cookie('accountAction', 'login', {
+  res.cookie(COOKIE_ACCOUNT_ACTION, 'login', {
     path: '/',
     httpOnly: true
   })
@@ -70,9 +73,9 @@ router.get('/callback', async (req: Request, res: Response) => {
       req.query.code,
       req.cookies.accountAction
     )
-    res.clearCookie('authorizationState')
-    res.clearCookie('accountAction')
-    res.cookie('sessionId', sessionId, {
+    res.clearCookie(COOKIE_AUTH_STATE)
+    res.clearCookie(COOKIE_ACCOUNT_ACTION)
+    res.cookie(COOKIE_SESSION_ID, sessionId, {
       path: '/',
       httpOnly: true
     })
