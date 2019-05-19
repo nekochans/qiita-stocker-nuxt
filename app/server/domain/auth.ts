@@ -130,8 +130,8 @@ export const fetchSessionId = async (
       )
       break
     default:
-      // eslint-disable-next-line
       const _: never = accountAction
+      sessionId = _
       break
   }
   return sessionId
