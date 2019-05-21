@@ -18,7 +18,6 @@
     "createEnvrc:prod": "DEPLOY_STAGE=prod ts-node --project tsconfig.server.json createEnvrc.ts"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/bulma": "^1.2.3",
     "@nuxtjs/markdownit": "^1.2.4",
     "cookie-parser": "^1.4.4",
