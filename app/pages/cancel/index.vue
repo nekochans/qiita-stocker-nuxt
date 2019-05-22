@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Cancel from '@/components/pages/cancel.vue'
+import Cancel from '@/components/pages/cancel/index.vue'
 
 @Component({
   components: {
