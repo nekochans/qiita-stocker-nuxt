@@ -2,12 +2,15 @@ import url from 'url'
 import uuid from 'uuid'
 import { AxiosResponse, AxiosError } from 'axios'
 import QiitaApiFactory from '../factroy/api/qiitaApiFactory'
-import QiitaStockerpiFactory from '../factroy/api/qiitaStockerApiFactory'
+import QiitaStockerApiFactory from '../factroy/api/qiitaStockerApiFactory'
 import { clientId, clientSecret, apiUrlBase } from '../constants/envConstant.ts'
 
 const qiitaApi = QiitaApiFactory.create()
-const qiitaStockerApi = QiitaStockerpiFactory.create()
+const qiitaStockerApi = QiitaStockerApiFactory.create()
 
+export const COOKIE_AUTH_STATE = 'authorizationState'
+export const COOKIE_ACCOUNT_ACTION = 'accountAction'
+export const COOKIE_SESSION_ID = 'sessionId'
 export type accountAction = 'signUp' | 'login'
 
 type QiitaStockerErrorData = {

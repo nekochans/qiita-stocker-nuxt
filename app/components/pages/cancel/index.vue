@@ -15,7 +15,10 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class extends Vue {
-  cancel() {}
+  async cancel() {
+    await this.$store.dispatch('qiita/cancel')
+    this.$router.replace({ path: 'cancel/complete' })
+  }
 }
 </script>
 

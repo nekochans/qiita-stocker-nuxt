@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { Api } from '@/server/domain/qiitaApiinterface'
+import { Api } from '@/server/domain/qiitaApiInterface'
 import {
   IssueAccessTokensRequest,
   IssueAccessTokensResponse,

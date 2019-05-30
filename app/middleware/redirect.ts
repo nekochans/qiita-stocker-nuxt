@@ -1,5 +1,11 @@
 export default function({ store, redirect, route }: any) {
-  const notRequiredAuthorization = ['/', '/signup', '/privacy', '/terms']
+  const notRequiredAuthorization = [
+    '/',
+    '/signup',
+    '/privacy',
+    '/terms',
+    '/cancel/complete'
+  ]
 
   if (notRequiredAuthorization.includes(route.path)) return
 
