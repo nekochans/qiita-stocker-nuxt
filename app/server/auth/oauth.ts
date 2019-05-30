@@ -1,21 +1,18 @@
 import { Router, Request, Response } from 'express'
-import * as qiita from '../domain/auth'
+import * as auth from '../domain/auth'
 
 const router = Router()
-const COOKIE_AUTH_STATE = 'authorizationState'
-const COOKIE_ACCOUNT_ACTION = 'accountAction'
-const COOKIE_SESSION_ID = 'sessionId'
 
 router.get('/request/signup', (req: Request, res: Response) => {
-  const authorizationState = qiita.createAuthorizationState()
-  const authorizationUrl = qiita.createAuthorizationUrl(authorizationState)
+  const authorizationState = auth.createAuthorizationState()
+  const authorizationUrl = auth.createAuthorizationUrl(authorizationState)
 
-  res.cookie(COOKIE_AUTH_STATE, authorizationState, {
+  res.cookie(auth.COOKIE_AUTH_STATE, authorizationState, {
     path: '/',
     httpOnly: true
   })
 
-  res.cookie(COOKIE_ACCOUNT_ACTION, 'signUp', {
+  res.cookie(auth.COOKIE_ACCOUNT_ACTION, 'signUp', {
     path: '/',
     httpOnly: true
   })
@@ -24,15 +21,15 @@ router.get('/request/signup', (req: Request, res: Response) => {
 })
 
 router.get('/request/login', (req: Request, res: Response) => {
-  const authorizationState = qiita.createAuthorizationState()
-  const authorizationUrl = qiita.createAuthorizationUrl(authorizationState)
+  const authorizationState = auth.createAuthorizationState()
+  const authorizationUrl = auth.createAuthorizationUrl(authorizationState)
 
-  res.cookie(COOKIE_AUTH_STATE, authorizationState, {
+  res.cookie(auth.COOKIE_AUTH_STATE, authorizationState, {
     path: '/',
     httpOnly: true
   })
 
-  res.cookie(COOKIE_ACCOUNT_ACTION, 'login', {
+  res.cookie(auth.COOKIE_ACCOUNT_ACTION, 'login', {
     path: '/',
     httpOnly: true
   })
@@ -42,8 +39,8 @@ router.get('/request/login', (req: Request, res: Response) => {
 
 router.get('/callback', async (req: Request, res: Response) => {
   if (
-    req.cookies.authorizationState == null ||
-    req.cookies.authorizationState !== req.query.state
+    req.cookies[auth.COOKIE_AUTH_STATE] == null ||
+    req.cookies[auth.COOKIE_AUTH_STATE] !== req.query.state
   ) {
     return res
       .status(400)
@@ -59,8 +56,8 @@ router.get('/callback', async (req: Request, res: Response) => {
   }
 
   if (
-    req.cookies.accountAction !== 'signUp' &&
-    req.cookies.accountAction !== 'login'
+    req.cookies[auth.COOKIE_ACCOUNT_ACTION] !== 'signUp' &&
+    req.cookies[auth.COOKIE_ACCOUNT_ACTION] !== 'login'
   ) {
     return res
       .status(400)
@@ -69,13 +66,13 @@ router.get('/callback', async (req: Request, res: Response) => {
   }
 
   try {
-    const sessionId = await qiita.fetchSessionId(
+    const sessionId = await auth.fetchSessionId(
       req.query.code,
-      req.cookies.accountAction
+      req.cookies[auth.COOKIE_ACCOUNT_ACTION]
     )
-    res.clearCookie(COOKIE_AUTH_STATE)
-    res.clearCookie(COOKIE_ACCOUNT_ACTION)
-    res.cookie(COOKIE_SESSION_ID, sessionId, {
+    res.clearCookie(auth.COOKIE_AUTH_STATE)
+    res.clearCookie(auth.COOKIE_ACCOUNT_ACTION)
+    res.cookie(auth.COOKIE_SESSION_ID, sessionId, {
       path: '/',
       httpOnly: true
     })

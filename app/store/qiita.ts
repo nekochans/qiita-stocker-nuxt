@@ -1,5 +1,6 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { RootState } from '@/store'
+import { cancelAccount } from '@/domain/domain'
 
 export type QiitaState = {
   sessionId: string
@@ -24,5 +25,11 @@ export const mutations: MutationTree<QiitaState> = {
 export const actions: ActionTree<QiitaState, RootState> = {
   saveSessionId: ({ commit }, sessionId: string) => {
     commit('saveSessionId', sessionId)
+  },
+  cancel: async ({ commit }) => {
+    try {
+      await cancelAccount()
+      commit('saveSessionId', '')
+    } catch (error) {}
   }
 }
