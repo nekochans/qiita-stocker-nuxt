@@ -12,11 +12,17 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { mapActions } from '@/store/qiita'
 
-@Component
+@Component({
+  methods: {
+    ...mapActions(['cancelAction'])
+  }
+})
 export default class extends Vue {
+  cancelAction!: () => void
   async cancel() {
-    await this.$store.dispatch('qiita/cancel')
+    await this.cancelAction()
     this.$router.replace({ path: 'cancel/complete' })
   }
 }

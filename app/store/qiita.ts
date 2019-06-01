@@ -1,35 +1,69 @@
-import { GetterTree, ActionTree, MutationTree } from 'vuex'
-import { RootState } from '@/store'
+import { createNamespacedHelpers } from 'vuex'
 import { cancelAccount } from '@/domain/domain'
+import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
 
 export type QiitaState = {
   sessionId: string
+}
+
+export interface QiitaGetters {
+  isLoggedIn: boolean
+}
+
+export interface QiitaMutations {
+  saveSessionId: {
+    sessionId: string
+  }
+}
+
+export interface QiitaActions {
+  saveSessionIdAction: {
+    sessionId: string
+  }
+  cancelAction: {}
 }
 
 export const state = (): QiitaState => ({
   sessionId: ''
 })
 
-export const getters: GetterTree<QiitaState, RootState> = {
+export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   isLoggedIn: (state): boolean => {
     return !!state.sessionId
   }
 }
 
-export const mutations: MutationTree<QiitaState> = {
-  saveSessionId: (state, sessionId: string) => {
+export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
+  saveSessionId: (state, { sessionId }) => {
     state.sessionId = sessionId
   }
 }
 
-export const actions: ActionTree<QiitaState, RootState> = {
-  saveSessionId: ({ commit }, sessionId: string) => {
+export const actions: DefineActions<
+  QiitaActions,
+  QiitaState,
+  QiitaMutations,
+  QiitaGetters
+> = {
+  saveSessionIdAction: ({ commit }, sessionId) => {
     commit('saveSessionId', sessionId)
   },
-  cancel: async ({ commit }) => {
+  cancelAction: async ({ commit }) => {
     try {
       await cancelAccount()
-      commit('saveSessionId', '')
+      commit('saveSessionId', { sessionId: '' })
     } catch (error) {}
   }
 }
+
+export const {
+  mapActions,
+  mapGetters,
+  mapMutations,
+  mapState
+} = createNamespacedHelpers<
+  QiitaState,
+  QiitaGetters,
+  QiitaMutations,
+  QiitaActions
+>('qiita')
