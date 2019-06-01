@@ -6,5 +6,6 @@ export default ({ req, store }: any) => {
   const cookies = new Cookies(req.headers.cookie)
   const sessionId = cookies.get('sessionId')
 
-  if (sessionId) store.dispatch('qiita/saveSessionId', sessionId)
+  if (sessionId)
+    store.dispatch('qiita/saveSessionIdAction', { sessionId: sessionId })
 }
