@@ -28,7 +28,6 @@
     "nuxt-property-decorator": "^2.3.0",
     "universal-cookie": "^4.0.0",
     "uuid": "^3.3.2",
-    "vue-property-decorator": "^8.1.1",
     "vuex-type-helper": "^1.2.2"
   },
   "devDependencies": {

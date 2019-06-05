@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import Complete from '@/components/pages/cancel/complete.vue'
 
 @Component({
