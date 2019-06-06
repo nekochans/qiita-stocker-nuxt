@@ -17,5 +17,5 @@ import AppFooter from '@/components/AppFooter.vue'
     AppFooter
   }
 })
-export default class Login extends Vue {}
+export default class extends Vue {}
 </script>

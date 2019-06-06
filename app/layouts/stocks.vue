@@ -1,17 +1,17 @@
 <template>
   <section>
-    <All />
+    <app-header />
+    <nuxt />
   </section>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import All from '@/components/pages/stocks/all.vue'
+import AppHeader from '@/components/AppHeader.vue'
 
 @Component({
-  layout: 'stocks',
   components: {
-    All
+    AppHeader
   }
 })
 export default class extends Vue {}
