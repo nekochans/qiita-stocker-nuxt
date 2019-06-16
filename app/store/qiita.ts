@@ -1,12 +1,22 @@
 import { createNamespacedHelpers } from 'vuex'
-import { cancelAccount, UncategorizedStock } from '@/domain/domain'
+import {
+  cancelAccount,
+  UncategorizedStock,
+  fetchUncategorizedStocks,
+  FetchUncategorizedStockRequest,
+  Page,
+  FetchUncategorizedStockResponse
+} from '@/domain/domain'
 import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
+import * as EnvConstant from '../constants/envConstant'
 
 export type QiitaState = {
   sessionId: string
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
   isLoading: boolean
+  currentPage: number
+  paging: Page[]
 }
 
 export interface QiitaGetters {
@@ -20,6 +30,18 @@ export interface QiitaMutations {
   saveSessionId: {
     sessionId: string
   }
+  saveUncategorizedStocks: {
+    uncategorizedStocks: UncategorizedStock[]
+  }
+  setIsLoading: {
+    isLoading: boolean
+  }
+  saveCurrentPage: {
+    currentPage: number
+  }
+  savePaging: {
+    paging: Page[]
+  }
 }
 
 export interface QiitaActions {
@@ -27,34 +49,16 @@ export interface QiitaActions {
     sessionId: string
   }
   cancelAction: {}
+  fetchUncategorizedStocks: Page
 }
 
 export const state = (): QiitaState => ({
   sessionId: '',
-  uncategorizedStocks: [
-    {
-      article_id: 'c0a2609ae61a72dcc60f',
-      title: 'title1',
-      user_id: 'test-user1',
-      profile_image_url:
-        'https://avatars3.githubusercontent.com/u/32682645?v=4',
-      article_created_at: '2018/09/30',
-      tags: ['laravel', 'php'],
-      isChecked: true
-    },
-    {
-      article_id: 'c0a2609ae61a72dcc60a',
-      title: 'title2',
-      user_id: 'test-user12',
-      profile_image_url:
-        'https://avatars3.githubusercontent.com/u/32682645?v=4',
-      article_created_at: '2018/09/30',
-      tags: ['Vue.js', 'Vuex', 'TypeScript'],
-      isChecked: false
-    }
-  ],
+  uncategorizedStocks: [],
   isCategorizing: false,
-  isLoading: true
+  isLoading: true,
+  currentPage: 1,
+  paging: []
 })
 
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
@@ -75,6 +79,18 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
 export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   saveSessionId: (state, { sessionId }) => {
     state.sessionId = sessionId
+  },
+  saveUncategorizedStocks: (state, { uncategorizedStocks }) => {
+    state.uncategorizedStocks = uncategorizedStocks
+  },
+  setIsLoading: (state, { isLoading }) => {
+    state.isLoading = isLoading
+  },
+  saveCurrentPage: (state, { currentPage }) => {
+    state.currentPage = currentPage
+  },
+  savePaging: (state, { paging }) => {
+    state.paging = paging
   }
 }
 
@@ -91,6 +107,39 @@ export const actions: DefineActions<
     try {
       await cancelAccount()
       commit('saveSessionId', { sessionId: '' })
+    } catch (error) {}
+  },
+  fetchUncategorizedStocks: async (
+    { commit, state },
+    page: Page = { page: state.currentPage, perPage: 20, relation: '' }
+  ) => {
+    try {
+      const fetchStockRequest: FetchUncategorizedStockRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        page: page.page,
+        parPage: page.perPage
+      }
+
+      const response: FetchUncategorizedStockResponse = await fetchUncategorizedStocks(
+        fetchStockRequest
+      )
+
+      const uncategorizedStocks: UncategorizedStock[] = []
+      for (const fetchStock of response.stocks) {
+        const date: string[] = fetchStock.stock.article_created_at.split(' ')
+        fetchStock.stock.article_created_at = date[0]
+        const uncategorizedStock: UncategorizedStock = Object.assign(
+          fetchStock.stock,
+          { isChecked: false, category: fetchStock.category }
+        )
+        uncategorizedStocks.push(uncategorizedStock)
+      }
+
+      commit('saveUncategorizedStocks', { uncategorizedStocks })
+      commit('setIsLoading', { isLoading: false })
+      commit('savePaging', { paging: response.paging })
+      commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {}
   }
 }

@@ -24,7 +24,8 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import SideMenu from '@/components/SideMenu.vue'
 import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
-import { mapGetters } from '@/store/qiita'
+import { mapGetters, mapActions } from '@/store/qiita'
+import { Page } from '@/domain/domain'
 
 @Component({
   components: {
@@ -34,7 +35,16 @@ import { mapGetters } from '@/store/qiita'
   },
   computed: {
     ...mapGetters(['uncategorizedStocks', 'isCategorizing', 'isLoading'])
+  },
+  methods: {
+    ...mapActions(['fetchUncategorizedStocks'])
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  fetchUncategorizedStocks!: (page?: Page) => void
+
+  async created() {
+    await this.fetchUncategorizedStocks()
+  }
+}
 </script>

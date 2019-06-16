@@ -4,6 +4,9 @@ const pkg = require('./package')
 const nuxtConfig: NuxtConfiguration = {
   mode: 'universal',
   srcDir: 'app',
+  env: {
+    apiUrlBase: process.env.API_URL_BASE || 'http://localhost:3000'
+  },
   router: {
     middleware: ['authCookie', 'redirect']
   },
