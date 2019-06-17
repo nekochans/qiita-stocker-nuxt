@@ -1,15 +1,10 @@
 <template>
-  <Cancel />
+  <div>ストック一覧を取得中...</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Cancel from '@/components/pages/cancel/index.vue'
 
-@Component({
-  components: {
-    Cancel
-  }
-})
+@Component
 export default class extends Vue {}
 </script>

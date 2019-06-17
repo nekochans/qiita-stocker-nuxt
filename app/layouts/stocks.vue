@@ -1,14 +1,17 @@
 <template>
-  <Cancel />
+  <section>
+    <app-header />
+    <nuxt />
+  </section>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Cancel from '@/components/pages/cancel/index.vue'
+import AppHeader from '@/components/AppHeader.vue'
 
 @Component({
   components: {
-    Cancel
+    AppHeader
   }
 })
 export default class extends Vue {}

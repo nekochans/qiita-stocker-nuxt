@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
 
@@ -17,5 +17,5 @@ import AppFooter from '@/components/AppFooter.vue'
     AppFooter
   }
 })
-export default class Login extends Vue {}
+export default class extends Vue {}
 </script>

@@ -1,5 +1,5 @@
 import QiitaStockerApiFactory from '../factroy/api/qiitaStockerApiFactory'
-import { apiUrlBase } from '../constants/envConstant.ts'
+import { apiUrlBase } from '../constants/envConstant'
 
 const qiitaStockerApi = QiitaStockerApiFactory.create()
 

@@ -1,15 +1,11 @@
 <template>
-  <Cancel />
+  <aside class="submenu menu">
+    サイドメニュー(仮)
+  </aside>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Cancel from '@/components/pages/cancel/index.vue'
-
-@Component({
-  components: {
-    Cancel
-  }
-})
+@Component
 export default class extends Vue {}
 </script>
