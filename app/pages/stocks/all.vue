@@ -7,6 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import All from '@/components/pages/stocks/all.vue'
+import { NuxtContext } from '@/types'
 
 @Component({
   layout: 'stocks',
@@ -14,5 +15,13 @@ import All from '@/components/pages/stocks/all.vue'
     All
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  async fetch({ store, error }: NuxtContext) {
+    try {
+      await store.dispatch('qiita/fetchUncategorizedStocks')
+    } catch (e) {
+      error({ statusCode: '500', message: 'test' })
+    }
+  }
+}
 </script>
