@@ -112,7 +112,7 @@ export const actions: DefineActions<
   fetchUncategorizedStocks: async (
     { commit, state },
     page: Page = { page: state.currentPage, perPage: 20, relation: '' }
-  ) => {
+  ): Promise<any> => {
     try {
       const fetchStockRequest: FetchUncategorizedStockRequest = {
         apiUrlBase: EnvConstant.apiUrlBase(),
@@ -140,7 +140,9 @@ export const actions: DefineActions<
       commit('setIsLoading', { isLoading: false })
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
-    } catch (error) {}
+    } catch (e) {
+      return Promise.reject(e)
+    }
   }
 }
 

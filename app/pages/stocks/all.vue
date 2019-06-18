@@ -20,7 +20,10 @@ export default class extends Vue {
     try {
       await store.dispatch('qiita/fetchUncategorizedStocks')
     } catch (e) {
-      error({ statusCode: '500', message: 'test' })
+      error({
+        statusCode: e.response.data.code,
+        message: e.response.data.message
+      })
     }
   }
 }
