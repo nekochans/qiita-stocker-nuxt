@@ -103,16 +103,18 @@ export const actions: DefineActions<
   saveSessionIdAction: ({ commit }, sessionId) => {
     commit('saveSessionId', sessionId)
   },
-  cancelAction: async ({ commit }) => {
+  cancelAction: async ({ commit }): Promise<void> => {
     try {
       await cancelAccount()
       commit('saveSessionId', { sessionId: '' })
-    } catch (error) {}
+    } catch (error) {
+      return Promise.reject(error)
+    }
   },
   fetchUncategorizedStocks: async (
     { commit, state },
     page: Page = { page: state.currentPage, perPage: 20, relation: '' }
-  ): Promise<any> => {
+  ): Promise<void> => {
     try {
       const fetchStockRequest: FetchUncategorizedStockRequest = {
         apiUrlBase: EnvConstant.apiUrlBase(),
@@ -140,8 +142,8 @@ export const actions: DefineActions<
       commit('setIsLoading', { isLoading: false })
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
-    } catch (e) {
-      return Promise.reject(e)
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 }

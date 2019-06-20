@@ -1,5 +1,5 @@
 <template>
-  <Error :error="error" />
+  <Error :message="message" />
 </template>
 
 <script lang="ts">
@@ -13,6 +13,12 @@ import Error from '@/components/pages/error.vue'
 })
 export default class extends Vue {
   @Prop()
-  error?: Object
+  error!: { statusCode: string; message: string }
+
+  message: string = ''
+
+  created() {
+    this.message = this.error.message
+  }
 }
 </script>

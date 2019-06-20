@@ -8,7 +8,15 @@ const nuxtConfig: NuxtConfiguration = {
     apiUrlBase: process.env.API_URL_BASE || 'http://localhost:3000'
   },
   router: {
-    middleware: ['authCookie', 'redirect']
+    middleware: ['authCookie', 'redirect'],
+    extendRoutes(routes: any, resolve) {
+      routes.push({
+        name: 'original_error',
+        path: '/error',
+        props: true,
+        component: resolve(__dirname, 'app/pages/error.vue')
+      })
+    }
   },
   /*
    ** Headers of the page

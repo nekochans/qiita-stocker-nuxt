@@ -2,7 +2,7 @@
   <main>
     <div class="container has-text-centered">
       <h1 class="title">Error</h1>
-      <h2 class="subtitle">{{ error.message }}</h2>
+      <h2 class="subtitle">{{ message }}</h2>
       <nuxt-link to="/">TOPページへ</nuxt-link>
     </div>
   </main>
@@ -14,7 +14,7 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 @Component
 export default class extends Vue {
   @Prop()
-  error!: Object
+  message!: string
 }
 </script>
 

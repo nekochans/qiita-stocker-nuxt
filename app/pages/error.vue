@@ -1,5 +1,5 @@
 <template>
-  <Error :message="errorMessage" />
+  <Error :message="message" />
 </template>
 
 <script lang="ts">
@@ -13,10 +13,6 @@ import Error from '@/components/pages/error.vue'
 })
 export default class extends Vue {
   @Prop()
-  errorMessage!: string
-
-  mounted() {
-    console.log(`🐑🐑🐑 ${this.errorMessage}`)
-  }
+  message!: string
 }
 </script>
