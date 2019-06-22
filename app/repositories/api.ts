@@ -1,11 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import {
+  QiitaStockerError,
   QiitaStockApi,
   Page,
   FetchUncategorizedStockRequest,
   FetchUncategorizedStockResponse
 } from '@/domain/domain'
-import { QiitaStockerError } from '@/server/domain/auth'
 
 export default class Api implements QiitaStockApi {
   /**
@@ -17,8 +17,8 @@ export default class Api implements QiitaStockApi {
       .then(() => {
         return Promise.resolve()
       })
-      .catch((axiosError: AxiosError) => {
-        return Promise.reject(axiosError)
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
       })
   }
 

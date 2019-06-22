@@ -25,11 +25,11 @@ export default class extends Vue {
     try {
       await this.cancelAction()
       this.$router.replace({ path: 'cancel/complete' })
-    } catch (e) {
+    } catch (error) {
       this.$router.push({
         name: 'original_error',
         params: {
-          message: e.response.data.message
+          message: error.message
         }
       })
     }
