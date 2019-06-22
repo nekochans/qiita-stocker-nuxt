@@ -4,7 +4,8 @@
   "description": "Mindexer Nuxt.js project",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nodemon",
+    "dev": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nuxt",
+    "dev:server": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nodemon",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node app/server/index.js",
     "generate": "nuxt generate",

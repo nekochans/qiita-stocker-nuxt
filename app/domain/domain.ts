@@ -1,6 +1,16 @@
 import QiitaStockApiFactory from '@/factory/qiitaStockApi'
+import { AxiosError, AxiosResponse } from 'axios'
 
 const api = QiitaStockApiFactory.create()
+
+type QiitaStockerErrorData = {
+  code: number
+  message: string
+}
+
+export type QiitaStockerError = AxiosError & {
+  response: AxiosResponse<QiitaStockerErrorData>
+}
 
 export type Page = {
   page: number

@@ -11,8 +11,8 @@ router.get('/cancel', async (req: Request, res: Response) => {
     return res.status(204).json()
   } catch (error) {
     return res
-      .status(400)
-      .send()
+      .status(error.response.status)
+      .json(error.response.data)
       .end()
   }
 })

@@ -3,13 +3,6 @@ import { Route } from 'vue-router'
 import { Store } from 'vuex'
 import { MetaInfo } from 'vue-meta'
 
-declare namespace NodeJS {
-  interface Process {
-    server: boolean
-    browser: boolean
-  }
-}
-
 interface NuxtContext {
   isClient: boolean
   isServer: boolean

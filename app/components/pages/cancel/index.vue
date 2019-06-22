@@ -22,8 +22,17 @@ import { mapActions } from '@/store/qiita'
 export default class extends Vue {
   cancelAction!: () => void
   async cancel() {
-    await this.cancelAction()
-    this.$router.replace({ path: 'cancel/complete' })
+    try {
+      await this.cancelAction()
+      this.$router.replace({ path: 'cancel/complete' })
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 }
 </script>
