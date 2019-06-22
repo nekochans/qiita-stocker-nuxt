@@ -25,7 +25,7 @@
             <div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">メニュー</a>
               <div class="navbar-dropdown is-right">
-                <nuxt-link class="navbar-item" to="/stocks"
+                <nuxt-link class="navbar-item" to="/stocks/all"
                   >ストック一覧</nuxt-link
                 >
                 <a class="navbar-item" @click="logout">ログアウト</a>
@@ -40,11 +40,37 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-@Component
+import { mapGetters, mapActions } from '@/store/qiita'
+
+@Component({
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  },
+  methods: {
+    ...mapActions(['logoutAction'])
+  }
+})
 export default class AppHeader extends Vue {
-  // TODO Storeの値に変更する
-  isLoggedIn: boolean = false
+  logoutAction!: () => void
   isMenuActive: boolean = false
+
+  menuToggle() {
+    this.isMenuActive = !this.isMenuActive
+  }
+
+  async logout() {
+    try {
+      await this.logoutAction()
+      this.$router.replace({ path: '/' })
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
 }
 </script>
 

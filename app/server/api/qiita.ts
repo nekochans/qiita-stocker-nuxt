@@ -17,4 +17,17 @@ router.get('/cancel', async (req: Request, res: Response) => {
   }
 })
 
+router.get('/logout', async (req: Request, res: Response) => {
+  try {
+    await qiita.logout(req.cookies[auth.COOKIE_SESSION_ID])
+    res.clearCookie(auth.COOKIE_SESSION_ID)
+    return res.status(204).json()
+  } catch (error) {
+    return res
+      .status(error.response.status)
+      .json(error.response.data)
+      .end()
+  }
+})
+
 export default router

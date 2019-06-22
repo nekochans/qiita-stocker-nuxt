@@ -51,6 +51,7 @@ export type FetchUncategorizedStockResponse = {
 
 export type QiitaStockApi = {
   cancelAccount(): Promise<void>
+  logout(): Promise<void>
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
@@ -58,6 +59,10 @@ export type QiitaStockApi = {
 
 export const cancelAccount = async () => {
   await api.cancelAccount()
+}
+
+export const logout = async () => {
+  await api.logout()
 }
 
 export const fetchUncategorizedStocks = (

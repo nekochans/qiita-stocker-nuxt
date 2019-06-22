@@ -5,7 +5,7 @@ import {
   IssueLoginSessionResponse
 } from '@/server/domain/auth'
 
-import { CancelAccountRequest } from '@/server/domain/qiita'
+import { CancelAccountRequest, LogoutRequest } from '@/server/domain/qiita'
 
 export type Api = {
   createAccount(request: CreateAccountRequest): Promise<CreateAccountResponse>
@@ -13,4 +13,5 @@ export type Api = {
     request: IssueLoginSessionRequest
   ): Promise<IssueLoginSessionResponse>
   cancelAccount(request: CancelAccountRequest): Promise<void>
+  logout(request: LogoutRequest): Promise<void>
 }
