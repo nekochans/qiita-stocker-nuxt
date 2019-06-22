@@ -1,6 +1,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import {
   cancelAccount,
+  logout,
   UncategorizedStock,
   fetchUncategorizedStocks,
   FetchUncategorizedStockRequest,
@@ -50,6 +51,7 @@ export interface QiitaActions {
   }
   cancelAction: {}
   fetchUncategorizedStocks: Page
+  logoutAction: {}
 }
 
 export const state = (): QiitaState => ({
@@ -142,6 +144,14 @@ export const actions: DefineActions<
       commit('setIsLoading', { isLoading: false })
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  logoutAction: async ({ commit }): Promise<void> => {
+    try {
+      await logout()
+      commit('saveSessionId', { sessionId: '' })
     } catch (error) {
       return Promise.reject(error)
     }

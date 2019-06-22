@@ -77,7 +77,7 @@ router.get('/callback', async (req: Request, res: Response) => {
       httpOnly: true
     })
 
-    return res.status(200).json({ code: sessionId })
+    return res.redirect(auth.redirectAppUrl())
   } catch (error) {
     return res
       .status(400)

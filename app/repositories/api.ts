@@ -22,6 +22,24 @@ export default class Api implements QiitaStockApi {
       })
   }
 
+  /**
+   * @return {Promise<void | never>}
+   */
+  logout(): Promise<void> {
+    return axios
+      .get('/api/logout')
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<FetchUncategorizedStockResponse | never>}
+   */
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse> {

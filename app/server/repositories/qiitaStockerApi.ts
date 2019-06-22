@@ -7,7 +7,7 @@ import {
   IssueLoginSessionRequest,
   IssueLoginSessionResponse
 } from '@/server/domain/auth'
-import { CancelAccountRequest } from '@/server/domain/qiita'
+import { CancelAccountRequest, LogoutRequest } from '@/server/domain/qiita'
 
 export default class QiitaStockerApi implements Api {
   createAccount(request: CreateAccountRequest): Promise<CreateAccountResponse> {
@@ -61,6 +61,21 @@ export default class QiitaStockerApi implements Api {
   cancelAccount(request: CancelAccountRequest): Promise<void> {
     return axios
       .delete(`${request.apiUrlBase}/api/accounts`, {
+        headers: {
+          Authorization: `Bearer ${request.sessionId}`
+        }
+      })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError)
+      })
+  }
+
+  logout(request: LogoutRequest): Promise<void> {
+    return axios
+      .delete(`${request.apiUrlBase}/api/login-sessions`, {
         headers: {
           Authorization: `Bearer ${request.sessionId}`
         }
