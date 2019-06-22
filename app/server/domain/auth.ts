@@ -3,7 +3,12 @@ import uuid from 'uuid'
 import { AxiosResponse, AxiosError } from 'axios'
 import QiitaApiFactory from '../factroy/api/qiitaApiFactory'
 import QiitaStockerApiFactory from '../factroy/api/qiitaStockerApiFactory'
-import { clientId, clientSecret, apiUrlBase } from '../constants/envConstant'
+import {
+  clientId,
+  clientSecret,
+  apiUrlBase,
+  appUrl
+} from '../constants/envConstant'
 
 const qiitaApi = QiitaApiFactory.create()
 const qiitaStockerApi = QiitaStockerApiFactory.create()
@@ -88,6 +93,10 @@ export const createAuthorizationUrl = (authorizationState: string): string => {
       state: authorizationState
     }
   })
+}
+
+export const redirectAppUrl = (): string => {
+  return `${appUrl()}/stocks/all`
 }
 
 /**

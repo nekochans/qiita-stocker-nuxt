@@ -15,3 +15,9 @@ export const apiUrlBase = (): string => {
     ? process.env.API_URL_BASE
     : ''
 }
+
+export const appUrl = (): string => {
+  return typeof process.env.APP_URL === 'string'
+    ? process.env.APP_URL
+    : ''
+}
