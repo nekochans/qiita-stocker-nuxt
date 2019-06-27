@@ -3,7 +3,10 @@
     <main class="container">
       <div class="columns">
         <div class="column is-3">
-          <SideMenu />
+          <SideMenu
+            :display-category-id="displayCategoryId"
+            :categories="categories"
+          />
         </div>
         <div class="column is-9">
           <Loading v-show="isLoading" />
@@ -33,8 +36,20 @@ import { mapGetters } from '@/store/qiita'
     Loading
   },
   computed: {
-    ...mapGetters(['uncategorizedStocks', 'isCategorizing', 'isLoading'])
+    ...mapGetters([
+      'displayCategoryId',
+      'categories',
+      'uncategorizedStocks',
+      'isCategorizing',
+      'isLoading'
+    ])
   }
 })
 export default class extends Vue {}
 </script>
+
+<style scoped>
+.container {
+  padding-top: 1rem;
+}
+</style>

@@ -6,13 +6,16 @@ import {
   fetchUncategorizedStocks,
   FetchUncategorizedStockRequest,
   Page,
-  FetchUncategorizedStockResponse
+  FetchUncategorizedStockResponse,
+  Category
 } from '@/domain/domain'
 import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
 import * as EnvConstant from '../constants/envConstant'
 
 export type QiitaState = {
   sessionId: string
+  displayCategoryId: number
+  category: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
   isLoading: boolean
@@ -22,6 +25,8 @@ export type QiitaState = {
 
 export interface QiitaGetters {
   isLoggedIn: boolean
+  displayCategoryId: number
+  categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
   isLoading: boolean
@@ -56,6 +61,11 @@ export interface QiitaActions {
 
 export const state = (): QiitaState => ({
   sessionId: '',
+  displayCategoryId: 0,
+  category: [
+    { categoryId: 1, name: 'category name 1' },
+    { categoryId: 2, name: 'category name 2' }
+  ],
   uncategorizedStocks: [],
   isCategorizing: false,
   isLoading: true,
@@ -66,6 +76,12 @@ export const state = (): QiitaState => ({
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   isLoggedIn: (state): boolean => {
     return !!state.sessionId
+  },
+  displayCategoryId: (state): number => {
+    return state.displayCategoryId
+  },
+  categories: (state): Category[] => {
+    return state.category
   },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
