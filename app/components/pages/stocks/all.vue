@@ -6,6 +6,7 @@
           <SideMenu
             :display-category-id="displayCategoryId"
             :categories="categories"
+            @clickSaveCategory="onClickSaveCategory"
           />
         </div>
         <div class="column is-9">
@@ -45,7 +46,12 @@ import { mapGetters } from '@/store/qiita'
     ])
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  onClickSaveCategory(categoryName: string) {
+    // TODO vuexのActionを呼び出す
+    console.log(categoryName)
+  }
+}
 </script>
 
 <style scoped>
