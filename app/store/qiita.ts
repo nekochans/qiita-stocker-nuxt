@@ -2,12 +2,15 @@ import { createNamespacedHelpers } from 'vuex'
 import {
   cancelAccount,
   logout,
-  UncategorizedStock,
   fetchUncategorizedStocks,
+  saveCategory,
+  UncategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
   FetchUncategorizedStockResponse,
-  Category
+  Category,
+  SaveCategoryRequest,
+  SaveCategoryResponse
 } from '@/domain/domain'
 import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
 import * as EnvConstant from '../constants/envConstant'
@@ -15,7 +18,7 @@ import * as EnvConstant from '../constants/envConstant'
 export type QiitaState = {
   sessionId: string
   displayCategoryId: number
-  category: Category[]
+  categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
   isLoading: boolean
@@ -48,6 +51,7 @@ export interface QiitaMutations {
   savePaging: {
     paging: Page[]
   }
+  addCategory: Category
 }
 
 export interface QiitaActions {
@@ -57,14 +61,15 @@ export interface QiitaActions {
   cancelAction: {}
   fetchUncategorizedStocks: Page
   logoutAction: {}
+  saveCategory: string
 }
 
 export const state = (): QiitaState => ({
   sessionId: '',
   displayCategoryId: 0,
-  category: [
-    { categoryId: 1, name: 'category name 1' },
-    { categoryId: 2, name: 'category name 2' }
+  categories: [
+    { categoryId: 10, name: 'category name 1' },
+    { categoryId: 20, name: 'category name 2' }
   ],
   uncategorizedStocks: [],
   isCategorizing: false,
@@ -81,7 +86,7 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
     return state.displayCategoryId
   },
   categories: (state): Category[] => {
-    return state.category
+    return state.categories
   },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
@@ -109,6 +114,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   savePaging: (state, { paging }) => {
     state.paging = paging
+  },
+  addCategory: (state, category) => {
+    state.categories.push(category)
   }
 }
 
@@ -168,6 +176,28 @@ export const actions: DefineActions<
     try {
       await logout()
       commit('saveSessionId', { sessionId: '' })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  saveCategory: async ({ commit, state }, category): Promise<void> => {
+    try {
+      const saveCategoryRequest: SaveCategoryRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        name: category,
+        sessionId: state.sessionId
+      }
+
+      const saveCategoryResponse: SaveCategoryResponse = await saveCategory(
+        saveCategoryRequest
+      )
+
+      const savedCategory: Category = {
+        categoryId: saveCategoryResponse.categoryId,
+        name: saveCategoryResponse.name
+      }
+
+      commit('addCategory', savedCategory)
     } catch (error) {
       return Promise.reject(error)
     }

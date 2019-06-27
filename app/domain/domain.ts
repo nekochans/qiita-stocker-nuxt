@@ -49,12 +49,21 @@ export type FetchUncategorizedStockResponse = {
   stocks: { stock: Stock; category?: Category }[]
 }
 
+export type SaveCategoryRequest = {
+  apiUrlBase: string
+  name: string
+  sessionId: string
+}
+
+export type SaveCategoryResponse = Category & {}
+
 export type QiitaStockApi = {
   cancelAccount(): Promise<void>
   logout(): Promise<void>
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
+  saveCategory(request: SaveCategoryRequest): Promise<SaveCategoryResponse>
 }
 
 export const cancelAccount = async () => {
@@ -69,4 +78,10 @@ export const fetchUncategorizedStocks = (
   request: FetchUncategorizedStockRequest
 ): Promise<FetchUncategorizedStockResponse> => {
   return api.fetchUncategorizedStocks(request)
+}
+
+export const saveCategory = (
+  request: SaveCategoryRequest
+): Promise<SaveCategoryResponse> => {
+  return api.saveCategory(request)
 }
