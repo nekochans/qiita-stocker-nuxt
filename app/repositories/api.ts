@@ -4,7 +4,9 @@ import {
   QiitaStockApi,
   Page,
   FetchUncategorizedStockRequest,
-  FetchUncategorizedStockResponse
+  FetchUncategorizedStockResponse,
+  SaveCategoryRequest,
+  SaveCategoryResponse
 } from '@/domain/domain'
 
 export default class Api implements QiitaStockApi {
@@ -67,6 +69,30 @@ export default class Api implements QiitaStockApi {
       })
       .catch((axiosError: QiitaStockerError) => {
         return Promise.reject(axiosError)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<any | never>}
+   */
+  saveCategory(request: SaveCategoryRequest): Promise<SaveCategoryResponse> {
+    return axios
+      .post<SaveCategoryResponse>(
+        `${request.apiUrlBase}/api/categories`,
+        { name: request.name },
+        {
+          headers: {
+            Authorization: `Bearer ${request.sessionId}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then((axiosResponse: AxiosResponse) => {
+        return Promise.resolve(axiosResponse.data)
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
       })
   }
 

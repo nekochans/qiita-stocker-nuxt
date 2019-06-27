@@ -19,6 +19,7 @@
     "createEnvrc:prod": "DEPLOY_STAGE=prod ts-node --project tsconfig.server.json createEnvrc.ts"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "@nuxtjs/bulma": "^1.2.3",
     "@nuxtjs/markdownit": "^1.2.5",
     "axios": "^0.19.0",
