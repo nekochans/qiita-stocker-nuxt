@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
-import { Api } from '@/server/domain/qiitaStockerApiInterface'
+import { Api } from '../domain/qiitaStockerApiInterface'
 import {
   CreateAccountRequest,
   CreateAccountResponse,
   QiitaStockerError,
   IssueLoginSessionRequest,
   IssueLoginSessionResponse
-} from '@/server/domain/auth'
-import { CancelAccountRequest, LogoutRequest } from '@/server/domain/qiita'
+} from '../domain/auth'
+import { CancelAccountRequest, LogoutRequest } from '../domain/qiita'
 
 export default class QiitaStockerApi implements Api {
   createAccount(request: CreateAccountRequest): Promise<CreateAccountResponse> {

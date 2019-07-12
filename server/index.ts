@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 import consola from 'consola'
 import cookieParser from 'cookie-parser'
-import config from '../../nuxt.config'
+import config from '../nuxt.config'
 import weather from './api/weather'
 import qiita from './api/qiita'
 import oauth from './auth/oauth'

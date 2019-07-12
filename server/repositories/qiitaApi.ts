@@ -1,11 +1,11 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { Api } from '@/server/domain/qiitaApiInterface'
+import { Api } from '../domain/qiitaApiInterface'
 import {
   IssueAccessTokensRequest,
   IssueAccessTokensResponse,
   FetchAuthenticatedUserResponse,
   FetchAuthenticatedUserRequest
-} from '@/server/domain/auth'
+} from '../domain/auth'
 
 export default class QiitaApi implements Api {
   /**
