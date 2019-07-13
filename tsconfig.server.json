@@ -6,6 +6,6 @@
     "outDir": "dist"
   },
   "include": [
-    "server/index.ts"
+    "server/server.ts"
   ]
 }

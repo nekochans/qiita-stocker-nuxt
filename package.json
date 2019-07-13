@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nuxt",
-    "dev:server": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nodemon",
+    "dev:server": "cross-env NODE_ENV=development nodemon",
     "build": "tsc -p tsconfig.server.json && nuxt build",
     "start": "cross-env NODE_ENV=production NUXT_HOST=127.0.0.1 NUXT_PORT=8080 node dist/server/index.js",
     "generate": "nuxt generate",
