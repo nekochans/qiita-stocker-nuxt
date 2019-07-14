@@ -15,6 +15,14 @@ provider:
     GOOGLE_SITE_VERIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/APP_URL~true}
     GOOGLE_SITE_VETRACKING_IDRIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/TRACKING_ID~true}
 
+plugins:
+  - serverless-apigw-binary
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+
 package:
   individually: true
   exclude:
