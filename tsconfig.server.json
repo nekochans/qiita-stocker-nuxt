@@ -6,6 +6,7 @@
     "outDir": "dist"
   },
   "include": [
-    "server/server.ts"
+    "server/server.ts",
+    "server/lambda.ts"
   ]
 }

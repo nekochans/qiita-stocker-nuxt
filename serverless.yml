@@ -1,0 +1,48 @@
+service: qiita-stocker-nuxt
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${env:STAGE}
+  region: ap-northeast-1
+  logRetentionInDays: 30
+
+package:
+  individually: true
+  exclude:
+    - .git/**
+    - .github/**
+    - .idea/**
+    - coverage/**
+    - node_modules/.bin/**
+    - node_modules/.cache/**
+    - node_modules/.cache/**
+    - app/**
+    - server/**
+    - test/**
+    - .editorconfig
+    - .gitignore
+    - .prettierrc
+    - createEnvrc.ts
+    - envUtils.ts
+    - jest.config.js
+    - LICENSE
+    - nodemon.json
+    - package.json
+    - qiita-stocker-nuxt.iml
+    - README.md
+    - tsconfig.json
+    - tsconfig.server.json
+    - yarn-error.log
+    - yarn.lock
+
+functions:
+  render:
+    handler: dist/server/lambda.render
+    events:
+      - http:
+          path: '/'
+          method: get
+      - http:
+          path: '/api/{proxy+}'
+          method: any

@@ -21,6 +21,5 @@ export const appUrl = (): string => {
 }
 
 export const stage = (): string => {
-  if (typeof process.env.STAGE !== 'string') return ''
-  return process.env.STAGE !== 'local' ? process.env.STAGE : ''
+  return typeof process.env.STAGE === 'string' ? process.env.STAGE : ''
 }
