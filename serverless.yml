@@ -8,6 +8,7 @@ provider:
   logRetentionInDays: 30
   environment:
     STAGE: ${env:STAGE}
+    NODE_ENV: ${env:NODE_ENV}
     QIITA_CLIENT_ID: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_ID~true}
     QIITA_CLIENT_SECRET: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_SECRET~true}
     API_URL_BASE: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/API_URL_BASE~true}

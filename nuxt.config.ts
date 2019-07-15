@@ -1,12 +1,5 @@
 import NuxtConfiguration from '@nuxt/config'
 
-import { stage } from './server/constants/envConstant'
-
-let routerBase = ''
-if (stage() !== 'local') {
-  routerBase = `/${stage()}/`
-}
-
 const nuxtConfig: NuxtConfiguration = {
   mode: 'universal',
   srcDir: 'app',
@@ -14,7 +7,6 @@ const nuxtConfig: NuxtConfiguration = {
     apiUrlBase: process.env.API_URL_BASE || 'http://localhost:3000'
   },
   router: {
-    base: routerBase,
     middleware: ['authCookie', 'redirect'],
     extendRoutes(routes: any, resolve) {
       routes.push({
