@@ -3,7 +3,7 @@ import {
   FetchAuthenticatedUserResponse,
   IssueAccessTokensRequest,
   IssueAccessTokensResponse
-} from '@/server/domain/auth'
+} from './auth'
 
 export type Api = {
   issueAccessToken(

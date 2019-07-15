@@ -15,7 +15,7 @@ import { isAllowedDeployStage, findAwsProfile } from './envUtils'
   }
 
   const params: ICreateEnvFileParams = {
-    type: '.envrc',
+    type: '.env',
     outputDir: './',
     profile: findAwsProfile(deployStage),
     parameterPath: `/${deployStage}/qiita-stocker/frontend`,

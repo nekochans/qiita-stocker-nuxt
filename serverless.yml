@@ -1,0 +1,68 @@
+service: qiita-stocker-nuxt
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${env:STAGE}
+  region: ap-northeast-1
+  logRetentionInDays: 30
+  environment:
+    STAGE: ${env:STAGE}
+    NODE_ENV: ${env:NODE_ENV}
+    QIITA_CLIENT_ID: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_ID~true}
+    QIITA_CLIENT_SECRET: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_SECRET~true}
+    API_URL_BASE: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/API_URL_BASE~true}
+    APP_URL: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/APP_URL~true}
+    GOOGLE_SITE_VERIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/APP_URL~true}
+    GOOGLE_SITE_VETRACKING_IDRIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/TRACKING_ID~true}
+
+plugins:
+  - serverless-apigw-binary
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+
+package:
+  individually: true
+  exclude:
+    - .git/**
+    - .github/**
+    - .idea/**
+    - coverage/**
+    - node_modules/.bin/**
+    - node_modules/.cache/**
+    - node_modules/.cache/**
+    - app/**
+    - server/**
+    - test/**
+    - .editorconfig
+    - .gitignore
+    - .prettierrc
+    - createEnv.ts
+    - envUtils.ts
+    - jest.config.js
+    - LICENSE
+    - nodemon.json
+    - package.json
+    - qiita-stocker-nuxt.iml
+    - README.md
+    - tsconfig.json
+    - tsconfig.server.json
+    - yarn-error.log
+    - yarn.lock
+
+functions:
+  render:
+    handler: dist/server/lambda.render
+    events:
+      - http:
+          path: '/'
+          method: get
+      - http:
+          path: '{proxy+}'
+          method: get
+      - http:
+          path: '/api/{proxy+}'
+          method: any
