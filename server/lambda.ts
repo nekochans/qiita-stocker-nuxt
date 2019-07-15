@@ -22,7 +22,11 @@ const binaryMimeTypes = [
   'text/xml'
 ]
 
-const server = awsServerlessExpress.createServer(app, undefined, binaryMimeTypes)
+const server = awsServerlessExpress.createServer(
+  app,
+  undefined,
+  binaryMimeTypes
+)
 
 module.exports.render = (
   event: lambda.APIGatewayEvent,

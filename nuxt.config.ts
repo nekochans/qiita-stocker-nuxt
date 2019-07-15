@@ -1,4 +1,5 @@
 import NuxtConfiguration from '@nuxt/config'
+require('dotenv').config()
 
 const nuxtConfig: NuxtConfiguration = {
   mode: 'universal',

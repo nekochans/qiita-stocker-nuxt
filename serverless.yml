@@ -40,7 +40,7 @@ package:
     - .editorconfig
     - .gitignore
     - .prettierrc
-    - createEnvrc.ts
+    - createEnv.ts
     - envUtils.ts
     - jest.config.js
     - LICENSE

@@ -13,16 +13,16 @@
     "format": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
     "test": "jest",
-    "deploy:dev": "yarn build && STAGE=dev NODE_ENV=production sls deploy -v",
-    "deploy:stg": "yarn build && STAGE=stg NODE_ENV=production sls deploy -v",
-    "deploy:prod": "yarn build && STAGE=prod NODE_ENV=production sls deploy -v",
+    "deploy:dev": "yarn createEnvrc:dev && yarn build && STAGE=dev NODE_ENV=production sls deploy -v",
+    "deploy:stg": "yarn createEnvrc:stg && yarn build && STAGE=stg NODE_ENV=production sls deploy -v",
+    "deploy:prod": "yarn createEnvrc:prod && yarn build && STAGE=prod NODE_ENV=production sls deploy -v",
     "remove:dev": "STAGE=dev sls remove -v",
     "remove:stg": "STAGE=stg sls remove -v",
     "remove:prod": "STAGE=prod sls remove -v",
-    "createEnvrc:local": "DEPLOY_STAGE=local ts-node --project tsconfig.server.json createEnvrc.ts",
-    "createEnvrc:dev": "DEPLOY_STAGE=dev ts-node --project tsconfig.server.json createEnvrc.ts",
-    "createEnvrc:stg": "DEPLOY_STAGE=stg ts-node --project tsconfig.server.json createEnvrc.ts",
-    "createEnvrc:prod": "DEPLOY_STAGE=prod ts-node --project tsconfig.server.json createEnvrc.ts"
+    "createEnvrc:local": "DEPLOY_STAGE=local ts-node --project tsconfig.server.json createEnv.ts",
+    "createEnvrc:dev": "DEPLOY_STAGE=dev ts-node --project tsconfig.server.json createEnv.ts",
+    "createEnvrc:stg": "DEPLOY_STAGE=stg ts-node --project tsconfig.server.json createEnv.ts",
+    "createEnvrc:prod": "DEPLOY_STAGE=prod ts-node --project tsconfig.server.json createEnv.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
