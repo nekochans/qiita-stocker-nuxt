@@ -9,12 +9,12 @@ provider:
   environment:
     STAGE: ${env:STAGE}
     NODE_ENV: ${env:NODE_ENV}
-    QIITA_CLIENT_ID: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_ID~true}
-    QIITA_CLIENT_SECRET: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/QIITA_CLIENT_SECRET~true}
-    API_URL_BASE: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/API_URL_BASE~true}
-    APP_URL: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/APP_URL~true}
-    GOOGLE_SITE_VERIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/APP_URL~true}
-    GOOGLE_SITE_VETRACKING_IDRIFICATION: ${ssm:/${self:provider.stage}/qiita-stocker/frontend/TRACKING_ID~true}
+    QIITA_CLIENT_ID: ${env:QIITA_CLIENT_ID}
+    QIITA_CLIENT_SECRET: ${env:QIITA_CLIENT_SECRET}
+    API_URL_BASE: ${env:API_URL_BASE}
+    APP_URL: ${env:APP_URL}
+    GOOGLE_SITE_VERIFICATION: ${env:GOOGLE_SITE_VERIFICATION}
+    TRACKING_ID: ${env:TRACKING_ID}
 
 plugins:
   - serverless-apigw-binary
