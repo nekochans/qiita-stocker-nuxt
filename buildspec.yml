@@ -12,3 +12,5 @@ phases:
   build:
     commands:
       - yarn run deploy:${DEPLOY_STAGE}
+      - aws s3 sync ./.nuxt/dist/client s3://${DEPLOY_STAGE}-qiita-stocker-nuxt/_nuxt --delete
+      - aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths "/*"
