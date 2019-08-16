@@ -1,4 +1,6 @@
 import { createNamespacedHelpers } from 'vuex'
+import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
+import * as EnvConstant from '../constants/envConstant'
 import {
   cancelAccount,
   logout,
@@ -12,8 +14,6 @@ import {
   SaveCategoryRequest,
   SaveCategoryResponse
 } from '@/domain/domain'
-import { DefineGetters, DefineMutations, DefineActions } from 'vuex-type-helper'
-import * as EnvConstant from '../constants/envConstant'
 
 export type QiitaState = {
   sessionId: string

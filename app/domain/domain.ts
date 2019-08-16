@@ -1,5 +1,5 @@
-import QiitaStockApiFactory from '@/factory/qiitaStockApi'
 import { AxiosError, AxiosResponse } from 'axios'
+import QiitaStockApiFactory from '@/factory/qiitaStockApi'
 
 const api = QiitaStockApiFactory.create()
 

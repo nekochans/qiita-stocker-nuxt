@@ -21,6 +21,7 @@ import { mapActions } from '@/store/qiita'
 })
 export default class extends Vue {
   cancelAction!: () => void
+
   async cancel() {
     try {
       await this.cancelAction()

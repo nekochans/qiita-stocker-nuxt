@@ -47,9 +47,7 @@ export default class Api implements QiitaStockApi {
   ): Promise<FetchUncategorizedStockResponse> {
     return axios
       .get<FetchUncategorizedStockResponse>(
-        `${request.apiUrlBase}/api/stocks?page=${request.page}&per_page=${
-          request.parPage
-        }`,
+        `${request.apiUrlBase}/api/stocks?page=${request.page}&per_page=${request.parPage}`,
         {
           headers: {
             Authorization: `Bearer ${request.sessionId}`

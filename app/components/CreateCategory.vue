@@ -47,7 +47,9 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class extends Vue {
   editing: boolean = false
+
   category: string = ''
+
   isValidationError: boolean = false
 
   doneEdit() {

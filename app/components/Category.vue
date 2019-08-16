@@ -38,6 +38,7 @@ export default class extends Vue {
   category!: Category
 
   editing: boolean = false
+
   isSelecting: boolean = false
 
   onClickCategory() {

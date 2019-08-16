@@ -52,6 +52,7 @@ import { mapGetters, mapActions } from '@/store/qiita'
 })
 export default class AppHeader extends Vue {
   logoutAction!: () => void
+
   isMenuActive: boolean = false
 
   menuToggle() {
