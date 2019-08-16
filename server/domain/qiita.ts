@@ -15,7 +15,7 @@ export type LogoutRequest = {
 export const cancelAccount = (sessionId: string): Promise<void> => {
   const cancelAccountRequest: CancelAccountRequest = {
     apiUrlBase: apiUrlBase(),
-    sessionId: sessionId
+    sessionId
   }
 
   return qiitaStockerApi.cancelAccount(cancelAccountRequest)
@@ -24,7 +24,7 @@ export const cancelAccount = (sessionId: string): Promise<void> => {
 export const logout = (sessionId: string): Promise<void> => {
   const logoutRequest: LogoutRequest = {
     apiUrlBase: apiUrlBase(),
-    sessionId: sessionId
+    sessionId
   }
 
   return qiitaStockerApi.logout(logoutRequest)

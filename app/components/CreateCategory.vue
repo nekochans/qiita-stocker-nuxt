@@ -38,7 +38,7 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   directives: {
-    focus: function(el, binding) {
+    focus(el, binding) {
       if (binding.value) {
         el.focus()
       }
