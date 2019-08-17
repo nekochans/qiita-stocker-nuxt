@@ -4,11 +4,6 @@ module.exports = {
     browser: true,
     node: true
   },
-  parserOptions: {
-    parser: '@typescript-eslint/parser',
-    sourceType: "module",
-    project: './tsconfig.json',
-  },
   extends: [
     "@nuxtjs/eslint-config-typescript",
     'plugin:nuxt/recommended',
@@ -18,12 +13,10 @@ module.exports = {
     'prettier/@typescript-eslint'
   ],
   plugins: [
-    'prettier',
-    '@typescript-eslint'
+    'prettier'
   ],
   rules: {
     'nuxt/no-cjs-in-config': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
     'camelcase': 0,
     'vue/no-v-html': 0,
     'no-console': 0
