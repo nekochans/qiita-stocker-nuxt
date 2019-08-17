@@ -10,7 +10,6 @@ module.exports = {
     project: './tsconfig.json',
   },
   extends: [
-    '@nuxtjs',
     'plugin:nuxt/recommended',
     'plugin:prettier/recommended',
     'prettier',
