@@ -26,7 +26,7 @@ import { Category } from '@/domain/domain'
 
 @Component({
   directives: {
-    focus: function(el, binding) {
+    focus(el, binding) {
       if (binding.value) {
         el.focus()
       }
@@ -38,6 +38,7 @@ export default class extends Vue {
   category!: Category
 
   editing: boolean = false
+
   isSelecting: boolean = false
 
   onClickCategory() {

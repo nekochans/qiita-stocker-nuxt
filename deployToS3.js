@@ -19,7 +19,7 @@ const credentials = new AWS.SharedIniFileCredentials({
 const client = s3.createClient({
   s3Options: {
     region: 'ap-northeast-1',
-    credentials: credentials
+    credentials
   }
 })
 
