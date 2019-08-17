@@ -47,6 +47,7 @@
   "devDependencies": {
     "@nekonomokochan/aws-env-creator": "^2.0.2",
     "@nuxt/typescript": "^2.6.1",
+    "@nuxtjs/eslint-config-typescript": "^0.1.2",
     "@types/aws-serverless-express": "^3.3.1",
     "@types/cookie-parser": "^1.4.1",
     "@types/dotenv": "^6.1.1",
