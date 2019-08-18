@@ -19,7 +19,7 @@ const nuxtConfig: NuxtConfiguration = {
     }
   },
   render: {
-    compressor: (req, res, next) => {
+    compressor: (_req, _res, next) => {
       next()
     }
   },

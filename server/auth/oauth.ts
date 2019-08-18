@@ -3,7 +3,7 @@ import * as auth from '../domain/auth'
 
 const router = Router()
 
-router.get('/request/signup', (req: Request, res: Response) => {
+router.get('/request/signup', (_req: Request, res: Response) => {
   const authorizationState = auth.createAuthorizationState()
   const authorizationUrl = auth.createAuthorizationUrl(authorizationState)
 
@@ -20,7 +20,7 @@ router.get('/request/signup', (req: Request, res: Response) => {
   return res.redirect(302, authorizationUrl)
 })
 
-router.get('/request/login', (req: Request, res: Response) => {
+router.get('/request/login', (_req: Request, res: Response) => {
   const authorizationState = auth.createAuthorizationState()
   const authorizationUrl = auth.createAuthorizationUrl(authorizationState)
 
