@@ -37,6 +37,12 @@ export type UncategorizedStock = Stock & {
   isChecked: boolean
 }
 
+export type FetchCategoriesRequest = {
+  apiUrlBase: string
+  sessionId: string
+}
+export type FetchCategoriesResponse = Category & {}
+
 export type FetchUncategorizedStockRequest = {
   apiUrlBase: string
   sessionId: string
@@ -60,6 +66,9 @@ export type SaveCategoryResponse = Category & {}
 export type QiitaStockApi = {
   cancelAccount(): Promise<void>
   logout(): Promise<void>
+  fetchCategories(
+    request: FetchCategoriesRequest
+  ): Promise<FetchCategoriesResponse[]>
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
@@ -72,6 +81,12 @@ export const cancelAccount = async () => {
 
 export const logout = async () => {
   await api.logout()
+}
+
+export const fetchCategories = (
+  request: FetchCategoriesRequest
+): Promise<FetchCategoriesResponse[]> => {
+  return api.fetchCategories(request)
 }
 
 export const fetchUncategorizedStocks = (
