@@ -4,11 +4,14 @@ import * as EnvConstant from '../constants/envConstant'
 import {
   cancelAccount,
   logout,
+  fetchCategories,
   fetchUncategorizedStocks,
   saveCategory,
   UncategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
+  FetchCategoriesRequest,
+  FetchCategoriesResponse,
   FetchUncategorizedStockResponse,
   Category,
   SaveCategoryRequest,
@@ -52,6 +55,9 @@ export interface QiitaMutations {
     paging: Page[]
   }
   addCategory: Category
+  saveCategories: {
+    categories: Category[]
+  }
 }
 
 export interface QiitaActions {
@@ -61,6 +67,7 @@ export interface QiitaActions {
   cancelAction: {}
   fetchUncategorizedStocks: Page
   logoutAction: {}
+  fetchCategory: {}
   saveCategory: string
 }
 
@@ -114,6 +121,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   savePaging: (state, { paging }) => {
     state.paging = paging
+  },
+  saveCategories: (state, { categories }) => {
+    state.categories = categories
   },
   addCategory: (state, category) => {
     state.categories.push(category)
@@ -198,6 +208,22 @@ export const actions: DefineActions<
       }
 
       commit('addCategory', savedCategory)
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  fetchCategory: async ({ commit, state }): Promise<void> => {
+    try {
+      const fetchCategoriesRequest: FetchCategoriesRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId
+      }
+
+      const categories: FetchCategoriesResponse[] = await fetchCategories(
+        fetchCategoriesRequest
+      )
+
+      commit('saveCategories', { categories })
     } catch (error) {
       return Promise.reject(error)
     }
