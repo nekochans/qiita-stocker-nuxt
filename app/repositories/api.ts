@@ -8,7 +8,9 @@ import {
   SaveCategoryRequest,
   SaveCategoryResponse,
   FetchCategoriesRequest,
-  FetchCategoriesResponse
+  FetchCategoriesResponse,
+  UpdateCategoryRequest,
+  UpdateCategoryResponse
 } from '@/domain/domain'
 
 export default class Api implements QiitaStockApi {
@@ -40,6 +42,10 @@ export default class Api implements QiitaStockApi {
       })
   }
 
+  /**
+   * @param request
+   * @return {Promise<unknown>}
+   */
   fetchCategories(
     request: FetchCategoriesRequest
   ): Promise<FetchCategoriesResponse[]> {
@@ -49,6 +55,32 @@ export default class Api implements QiitaStockApi {
           Authorization: `Bearer ${request.sessionId}`
         }
       })
+      .then((axiosResponse: AxiosResponse) => {
+        return Promise.resolve(axiosResponse.data)
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<unknown>}
+   */
+  updateCategory(
+    request: UpdateCategoryRequest
+  ): Promise<UpdateCategoryResponse> {
+    return axios
+      .patch<UpdateCategoryResponse>(
+        `${request.apiUrlBase}/api/categories/${request.categoryId}`,
+        { name: request.name },
+        {
+          headers: {
+            Authorization: `Bearer ${request.sessionId}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
       .then((axiosResponse: AxiosResponse) => {
         return Promise.resolve(axiosResponse.data)
       })

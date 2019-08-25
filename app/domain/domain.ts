@@ -43,6 +43,15 @@ export type FetchCategoriesRequest = {
 }
 export type FetchCategoriesResponse = Category & {}
 
+export type UpdateCategoryRequest = {
+  apiUrlBase: string
+  sessionId: string
+  categoryId: number
+  name: string
+}
+
+export type UpdateCategoryResponse = Category & {}
+
 export type FetchUncategorizedStockRequest = {
   apiUrlBase: string
   sessionId: string
@@ -69,6 +78,9 @@ export type QiitaStockApi = {
   fetchCategories(
     request: FetchCategoriesRequest
   ): Promise<FetchCategoriesResponse[]>
+  updateCategory(
+    request: UpdateCategoryRequest
+  ): Promise<UpdateCategoryResponse>
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
@@ -87,6 +99,12 @@ export const fetchCategories = (
   request: FetchCategoriesRequest
 ): Promise<FetchCategoriesResponse[]> => {
   return api.fetchCategories(request)
+}
+
+export const updateCategory = (
+  request: UpdateCategoryRequest
+): Promise<UpdateCategoryResponse> => {
+  return api.updateCategory(request)
 }
 
 export const fetchUncategorizedStocks = (
