@@ -59,7 +59,7 @@ export default class Api implements QiitaStockApi {
         return Promise.resolve(axiosResponse.data)
       })
       .catch((axiosError: QiitaStockerError) => {
-        return Promise.reject(axiosError)
+        return Promise.reject(axiosError.response.data)
       })
   }
 
@@ -85,7 +85,7 @@ export default class Api implements QiitaStockApi {
         return Promise.resolve(axiosResponse.data)
       })
       .catch((axiosError: QiitaStockerError) => {
-        return Promise.reject(axiosError)
+        return Promise.reject(axiosError.response.data)
       })
   }
 
@@ -117,7 +117,7 @@ export default class Api implements QiitaStockApi {
         return Promise.resolve(response)
       })
       .catch((axiosError: QiitaStockerError) => {
-        return Promise.reject(axiosError)
+        return Promise.reject(axiosError.response.data)
       })
   }
 

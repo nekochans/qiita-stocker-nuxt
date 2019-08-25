@@ -18,6 +18,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Category } from '@/domain/domain'
 import CategoryItem from '@/components/Category.vue'
+import { UpdateCategoryPayload } from '@/store/qiita'
 
 @Component({
   components: {
@@ -32,8 +33,8 @@ export default class extends Vue {
     // TODO カテゴリ選択時の処理を追加
   }
 
-  onClickUpdateCategory() {
-    // TODO カテゴリ変更時の処理を追加
+  onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
+    this.$emit('clickUpdateCategory', updateCategoryPayload)
   }
 
   onClickDestroyCategory() {

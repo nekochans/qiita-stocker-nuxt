@@ -1,7 +1,10 @@
 <template>
   <aside class="submenu menu">
     <DefaultMenuList :display-category-id="displayCategoryId" />
-    <CategoryList :categories="categories" />
+    <CategoryList
+      :categories="categories"
+      @clickUpdateCategory="onClickUpdateCategory"
+    />
     <CreateCategory @clickSaveCategory="onClickSaveCategory" />
   </aside>
 </template>
@@ -12,6 +15,7 @@ import { Category } from '@/domain/domain'
 import DefaultMenuList from '@/components/DefaultMenuList.vue'
 import CategoryList from '@/components/CategoryList.vue'
 import CreateCategory from '@/components/CreateCategory.vue'
+import { UpdateCategoryPayload } from '@/store/qiita'
 
 @Component({
   components: {
@@ -29,6 +33,10 @@ export default class extends Vue {
 
   onClickSaveCategory(category: string) {
     this.$emit('clickSaveCategory', category)
+  }
+
+  onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
+    this.$emit('clickUpdateCategory', updateCategoryPayload)
   }
 }
 </script>
