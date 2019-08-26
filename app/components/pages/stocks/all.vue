@@ -19,6 +19,18 @@
             :is-categorizing="isCategorizing"
             :is-loading="isLoading"
           />
+          <Pagination
+            :is-loading="isLoading"
+            :is-categorizing="isCategorizing"
+            :checked-stock-article-ids="checkedStockArticleIds"
+            :stocks-length="uncategorizedStocks.length"
+            :current-page="currentPage"
+            :first-page="firstPage"
+            :prev-page="prevPage"
+            :next-page="nextPage"
+            :last-page="lastPage"
+            @clickGoToPage="fetchOtherPageStock"
+          />
         </div>
       </div>
     </main>
@@ -30,16 +42,25 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import SideMenu from '@/components/SideMenu.vue'
 import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
+import Pagination from '@/components/Pagination.vue'
 import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
+import { Page } from '@/domain/domain'
 
 @Component({
   components: {
     SideMenu,
     StockList,
-    Loading
+    Loading,
+    Pagination
   },
   computed: {
     ...mapGetters([
+      'currentPage',
+      'firstPage',
+      'prevPage',
+      'nextPage',
+      'lastPage',
+      'checkedStockArticleIds',
       'displayCategoryId',
       'categories',
       'uncategorizedStocks',
@@ -55,6 +76,10 @@ export default class extends Vue {
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
+
+  fetchOtherPageStock(page: Page) {
+    console.log(`${page} fetchOtherPageStock`)
+  }
 
   async onClickSaveCategory(categoryName: string) {
     try {
