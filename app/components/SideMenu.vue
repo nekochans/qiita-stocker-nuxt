@@ -4,6 +4,7 @@
     <CategoryList
       :categories="categories"
       @clickUpdateCategory="onClickUpdateCategory"
+      @clickDestroyCategory="onClickDestroyCategory"
     />
     <CreateCategory @clickSaveCategory="onClickSaveCategory" />
   </aside>
@@ -37,6 +38,10 @@ export default class extends Vue {
 
   onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
     this.$emit('clickUpdateCategory', updateCategoryPayload)
+  }
+
+  onClickDestroyCategory(categoryId: number) {
+    this.$emit('clickDestroyCategory', categoryId)
   }
 }
 </script>

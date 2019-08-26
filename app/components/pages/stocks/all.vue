@@ -8,6 +8,7 @@
             :categories="categories"
             @clickSaveCategory="onClickSaveCategory"
             @clickUpdateCategory="onClickUpdateCategory"
+            @clickDestroyCategory="onClickDestroyCategory"
           />
         </div>
         <div class="column is-9">
@@ -78,6 +79,11 @@ export default class extends Vue {
         }
       })
     }
+  }
+
+  onClickDestroyCategory(categoryId: number) {
+    // TODO
+    console.log(`${categoryId} カテゴリ削除`)
   }
 }
 </script>
