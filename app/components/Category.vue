@@ -1,5 +1,13 @@
 <template>
   <div>
+    <ConfirmModal
+      :is-show="showConfirmation"
+      :message="confirmMessage"
+      :confirm-button-text="confirmButtonText"
+      :cancel-button-text="cancelButtonText"
+      @confirmModal="confirmDestroy"
+      @cancelModal="cancelDestroy"
+    />
     <li>
       <div v-if="!editing">
         <a
@@ -53,8 +61,12 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Category } from '@/domain/domain'
 import { UpdateCategoryPayload } from '@/store/qiita'
+import ConfirmModal from '@/components/ConfirmModal.vue'
 
 @Component({
+  components: {
+    ConfirmModal
+  },
   directives: {
     focus(el, binding) {
       if (binding.value) {
@@ -71,6 +83,11 @@ export default class extends Vue {
   editCategoryName = this.category.name
   isValidationError: boolean = false
   isSelecting: boolean = false
+
+  showConfirmation: boolean = false
+  confirmMessage: string = this.buildConfirmMessage(this.category.name)
+  confirmButtonText: string = '削除'
+  cancelButtonText: string = 'キャンセル'
 
   onClickCategory() {
     // TODO カテゴリ選択時の処理を追加
@@ -101,12 +118,33 @@ export default class extends Vue {
     }
 
     this.$emit('clickUpdateCategory', updateCategoryPayload)
+    this.confirmMessage = this.buildConfirmMessage(this.editCategoryName)
     this.isValidationError = false
     this.editing = false
   }
 
   onClickDestroyCategory() {
-    // TODO カテゴリ削除
+    this.showConfirmation = true
+  }
+
+  confirmDestroy(): void {
+    this.showConfirmation = false
+    this.$emit('clickDestroyCategory', this.category.categoryId)
+
+    // TODO 選択中のカテゴリが削除された場合は全てのストックを表示する
+    // if (this.isSelecting) {
+    //   this.$router.push({
+    //     name: 'stocks'
+    //   })
+    // }
+  }
+
+  cancelDestroy(): void {
+    this.showConfirmation = false
+  }
+
+  buildConfirmMessage(categoryName: string): string {
+    return `${categoryName} を削除してもよろしいですか？`
   }
 }
 </script>

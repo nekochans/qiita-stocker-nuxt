@@ -8,6 +8,7 @@
             :categories="categories"
             @clickSaveCategory="onClickSaveCategory"
             @clickUpdateCategory="onClickUpdateCategory"
+            @clickDestroyCategory="onClickDestroyCategory"
           />
         </div>
         <div class="column is-9">
@@ -47,12 +48,13 @@ import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
     ])
   },
   methods: {
-    ...mapActions(['saveCategory', 'updateCategory'])
+    ...mapActions(['saveCategory', 'updateCategory', 'destroyCategory'])
   }
 })
 export default class extends Vue {
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
+  destroyCategory!: (categoryId: number) => void
 
   async onClickSaveCategory(categoryName: string) {
     try {
@@ -70,6 +72,19 @@ export default class extends Vue {
   async onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
     try {
       await this.updateCategory(updateCategoryPayload)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
+
+  async onClickDestroyCategory(categoryId: number) {
+    try {
+      await this.destroyCategory(categoryId)
     } catch (error) {
       this.$router.push({
         name: 'original_error',

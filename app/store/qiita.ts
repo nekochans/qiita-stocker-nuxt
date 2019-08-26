@@ -8,6 +8,7 @@ import {
   updateCategory,
   fetchUncategorizedStocks,
   saveCategory,
+  destroyCategory,
   UncategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
@@ -18,7 +19,8 @@ import {
   FetchUncategorizedStockResponse,
   Category,
   SaveCategoryRequest,
-  SaveCategoryResponse
+  SaveCategoryResponse,
+  DestroyCategoryRequest
 } from '@/domain/domain'
 
 export type QiitaState = {
@@ -61,11 +63,13 @@ export interface QiitaMutations {
   saveCategories: {
     categories: Category[]
   }
+  removeCategory: number
   updateCategory: {
     stateCategory: Category
     categoryName: string
   }
   updateStockCategoryName: Category
+  removeCategoryFromStock: number
 }
 
 export interface QiitaActions {
@@ -78,6 +82,7 @@ export interface QiitaActions {
   fetchCategory: {}
   updateCategory: UpdateCategoryPayload
   saveCategory: string
+  destroyCategory: number
 }
 
 export const state = (): QiitaState => ({
@@ -139,6 +144,11 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   saveCategories: (state, { categories }) => {
     state.categories = categories
   },
+  removeCategory: (state, categoryId) => {
+    state.categories = state.categories.filter(
+      category => category.categoryId !== categoryId
+    )
+  },
   addCategory: (state, category) => {
     state.categories.push(category)
   },
@@ -152,6 +162,13 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
     state.uncategorizedStocks.map(stock => {
       if (stock.category && stock.category.categoryId === category.categoryId) {
         stock.category = category
+      }
+    })
+  },
+  removeCategoryFromStock: (state, categoryId) => {
+    state.uncategorizedStocks.map(stock => {
+      if (stock.category && stock.category.categoryId === categoryId) {
+        stock.category = undefined
       }
     })
   }
@@ -280,6 +297,29 @@ export const actions: DefineActions<
         categoryId: updateCategoryItem.stateCategory.categoryId,
         name: updateCategoryResponse.name
       })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  destroyCategory: async (
+    { commit, state },
+    categoryId: number
+  ): Promise<void> => {
+    try {
+      const destroyCategoryRequest: DestroyCategoryRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        categoryId
+      }
+
+      await destroyCategory(destroyCategoryRequest)
+
+      commit('removeCategory', categoryId)
+      commit('removeCategoryFromStock', categoryId)
+
+      // TODO 選択中のカテゴリが削除された場合の処理を追加
+      // if (state.displayCategoryId === categoryId)
+      //   return commit("saveDisplayCategoryId", 0);
     } catch (error) {
       return Promise.reject(error)
     }

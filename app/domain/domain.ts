@@ -49,8 +49,13 @@ export type UpdateCategoryRequest = {
   categoryId: number
   name: string
 }
-
 export type UpdateCategoryResponse = Category & {}
+
+export type DestroyCategoryRequest = {
+  apiUrlBase: string
+  sessionId: string
+  categoryId: number
+}
 
 export type FetchUncategorizedStockRequest = {
   apiUrlBase: string
@@ -85,6 +90,7 @@ export type QiitaStockApi = {
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
   saveCategory(request: SaveCategoryRequest): Promise<SaveCategoryResponse>
+  destroyCategory(request: DestroyCategoryRequest): Promise<void>
 }
 
 export const cancelAccount = async () => {
@@ -117,4 +123,10 @@ export const saveCategory = (
   request: SaveCategoryRequest
 ): Promise<SaveCategoryResponse> => {
   return api.saveCategory(request)
+}
+
+export const destroyCategory = (
+  request: DestroyCategoryRequest
+): Promise<void> => {
+  return api.destroyCategory(request)
 }

@@ -37,8 +37,8 @@ export default class extends Vue {
     this.$emit('clickUpdateCategory', updateCategoryPayload)
   }
 
-  onClickDestroyCategory() {
-    // TODO カテゴリ削除時の処理を追加
+  onClickDestroyCategory(categoryId: number) {
+    this.$emit('clickDestroyCategory', categoryId)
   }
 }
 </script>
