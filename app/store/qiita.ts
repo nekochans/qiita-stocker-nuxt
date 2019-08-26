@@ -5,6 +5,7 @@ import {
   cancelAccount,
   logout,
   fetchCategories,
+  updateCategory,
   fetchUncategorizedStocks,
   saveCategory,
   UncategorizedStock,
@@ -12,6 +13,8 @@ import {
   Page,
   FetchCategoriesRequest,
   FetchCategoriesResponse,
+  UpdateCategoryRequest,
+  UpdateCategoryResponse,
   FetchUncategorizedStockResponse,
   Category,
   SaveCategoryRequest,
@@ -58,6 +61,11 @@ export interface QiitaMutations {
   saveCategories: {
     categories: Category[]
   }
+  updateCategory: {
+    stateCategory: Category
+    categoryName: string
+  }
+  updateStockCategoryName: Category
 }
 
 export interface QiitaActions {
@@ -68,6 +76,7 @@ export interface QiitaActions {
   fetchUncategorizedStocks: Page
   logoutAction: {}
   fetchCategory: {}
+  updateCategory: UpdateCategoryPayload
   saveCategory: string
 }
 
@@ -84,6 +93,11 @@ export const state = (): QiitaState => ({
   currentPage: 1,
   paging: []
 })
+
+export type UpdateCategoryPayload = {
+  stateCategory: Category
+  categoryName: string
+}
 
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   isLoggedIn: (state): boolean => {
@@ -127,6 +141,19 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   addCategory: (state, category) => {
     state.categories.push(category)
+  },
+  updateCategory: (
+    _state,
+    payload: { stateCategory: Category; categoryName: string }
+  ) => {
+    payload.stateCategory.name = payload.categoryName
+  },
+  updateStockCategoryName: (state, category) => {
+    state.uncategorizedStocks.map(stock => {
+      if (stock.category && stock.category.categoryId === category.categoryId) {
+        stock.category = category
+      }
+    })
   }
 }
 
@@ -224,6 +251,35 @@ export const actions: DefineActions<
       )
 
       commit('saveCategories', { categories })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  updateCategory: async (
+    { commit, state },
+    updateCategoryItem: UpdateCategoryPayload
+  ): Promise<void> => {
+    try {
+      const updateCategoryRequest: UpdateCategoryRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        categoryId: updateCategoryItem.stateCategory.categoryId,
+        name: updateCategoryItem.categoryName
+      }
+
+      const updateCategoryResponse: UpdateCategoryResponse = await updateCategory(
+        updateCategoryRequest
+      )
+
+      commit('updateCategory', {
+        stateCategory: updateCategoryItem.stateCategory,
+        categoryName: updateCategoryResponse.name
+      })
+
+      commit('updateStockCategoryName', {
+        categoryId: updateCategoryItem.stateCategory.categoryId,
+        name: updateCategoryResponse.name
+      })
     } catch (error) {
       return Promise.reject(error)
     }

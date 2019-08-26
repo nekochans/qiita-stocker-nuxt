@@ -7,6 +7,7 @@
             :display-category-id="displayCategoryId"
             :categories="categories"
             @clickSaveCategory="onClickSaveCategory"
+            @clickUpdateCategory="onClickUpdateCategory"
           />
         </div>
         <div class="column is-9">
@@ -28,7 +29,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import SideMenu from '@/components/SideMenu.vue'
 import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
-import { mapGetters, mapActions } from '@/store/qiita'
+import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
 
 @Component({
   components: {
@@ -46,15 +47,29 @@ import { mapGetters, mapActions } from '@/store/qiita'
     ])
   },
   methods: {
-    ...mapActions(['saveCategory'])
+    ...mapActions(['saveCategory', 'updateCategory'])
   }
 })
 export default class extends Vue {
   saveCategory!: (category: string) => void
+  updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
 
   async onClickSaveCategory(categoryName: string) {
     try {
       await this.saveCategory(categoryName)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
+
+  async onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
+    try {
+      await this.updateCategory(updateCategoryPayload)
     } catch (error) {
       this.$router.push({
         name: 'original_error',
