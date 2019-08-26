@@ -48,12 +48,13 @@ import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
     ])
   },
   methods: {
-    ...mapActions(['saveCategory', 'updateCategory'])
+    ...mapActions(['saveCategory', 'updateCategory', 'destroyCategory'])
   }
 })
 export default class extends Vue {
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
+  destroyCategory!: (categoryId: number) => void
 
   async onClickSaveCategory(categoryName: string) {
     try {
@@ -81,9 +82,17 @@ export default class extends Vue {
     }
   }
 
-  onClickDestroyCategory(categoryId: number) {
-    // TODO
-    console.log(`${categoryId} カテゴリ削除`)
+  async onClickDestroyCategory(categoryId: number) {
+    try {
+      await this.destroyCategory(categoryId)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 }
 </script>

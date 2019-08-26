@@ -10,7 +10,8 @@ import {
   FetchCategoriesRequest,
   FetchCategoriesResponse,
   UpdateCategoryRequest,
-  UpdateCategoryResponse
+  UpdateCategoryResponse,
+  DestroyCategoryRequest
 } from '@/domain/domain'
 
 export default class Api implements QiitaStockApi {
@@ -139,6 +140,26 @@ export default class Api implements QiitaStockApi {
       )
       .then((axiosResponse: AxiosResponse) => {
         return Promise.resolve(axiosResponse.data)
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<void | never>}
+   */
+  destroyCategory(request: DestroyCategoryRequest): Promise<void> {
+    return axios
+      .delete(`${request.apiUrlBase}/api/categories/${request.categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${request.sessionId}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(() => {
+        return Promise.resolve()
       })
       .catch((axiosError: QiitaStockerError) => {
         return Promise.reject(axiosError.response.data)
