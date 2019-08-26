@@ -69,16 +69,31 @@ import { Page } from '@/domain/domain'
     ])
   },
   methods: {
-    ...mapActions(['saveCategory', 'updateCategory', 'destroyCategory'])
+    ...mapActions([
+      'fetchUncategorizedStocks',
+      'saveCategory',
+      'updateCategory',
+      'destroyCategory'
+    ])
   }
 })
 export default class extends Vue {
+  fetchUncategorizedStocks!: (page?: Page) => void
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
 
-  fetchOtherPageStock(page: Page) {
-    console.log(`${page} fetchOtherPageStock`)
+  async fetchOtherPageStock(page: Page) {
+    try {
+      await this.fetchUncategorizedStocks(page)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 
   async onClickSaveCategory(categoryName: string) {

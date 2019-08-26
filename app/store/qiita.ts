@@ -250,6 +250,8 @@ export const actions: DefineActions<
     page: Page = { page: state.currentPage, perPage: 20, relation: '' }
   ): Promise<void> => {
     try {
+      commit('setIsLoading', { isLoading: true })
+
       const fetchStockRequest: FetchUncategorizedStockRequest = {
         apiUrlBase: EnvConstant.apiUrlBase(),
         sessionId: state.sessionId,
@@ -277,6 +279,7 @@ export const actions: DefineActions<
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {
+      commit('setIsLoading', { isLoading: false })
       return Promise.reject(error)
     }
   },
