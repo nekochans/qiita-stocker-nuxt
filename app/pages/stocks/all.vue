@@ -22,8 +22,8 @@ export default class extends Vue {
       await store.dispatch('qiita/fetchCategory')
     } catch (e) {
       error({
-        statusCode: e.response.data.code,
-        message: e.response.data.message
+        statusCode: e.code,
+        message: e.message
       })
     }
   }
