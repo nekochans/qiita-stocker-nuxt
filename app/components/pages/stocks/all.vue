@@ -13,6 +13,16 @@
         </div>
         <div class="column is-9">
           <Loading v-show="isLoading" />
+          <StockEdit
+            :is-loading="isLoading"
+            :stocks-length="uncategorizedStocks.length"
+            :is-categorizing="isCategorizing"
+            :is-canceling-categorization="isCancelingCategorization"
+            :display-categories="displayCategories"
+            :checked-stock-article-ids="checkedStockArticleIds"
+            @clickSetIsCategorizing="onSetIsCategorizing"
+            @clickCategorize="onClickCategorize"
+          />
           <StockList
             v-show="!isLoading"
             :stocks="uncategorizedStocks"
@@ -43,15 +53,17 @@ import SideMenu from '@/components/SideMenu.vue'
 import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
 import Pagination from '@/components/Pagination.vue'
+import StockEdit from '@/components/StockEdit.vue'
 import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
-import { Page } from '@/domain/domain'
+import { Page, Category } from '@/domain/domain'
 
 @Component({
   components: {
     SideMenu,
     StockList,
     Loading,
-    Pagination
+    Pagination,
+    StockEdit
   },
   computed: {
     ...mapGetters([
@@ -62,9 +74,11 @@ import { Page } from '@/domain/domain'
       'lastPage',
       'checkedStockArticleIds',
       'displayCategoryId',
+      'displayCategories',
       'categories',
       'uncategorizedStocks',
       'isCategorizing',
+      'isCancelingCategorization',
       'isLoading'
     ])
   },
@@ -133,6 +147,19 @@ export default class extends Vue {
         }
       })
     }
+  }
+
+  onSetIsCategorizing() {
+    console.log('onSetIsCategorizing')
+  }
+
+  onClickCategorize(category: Category) {
+    console.log(`${category} onClickCategorize`)
+    //   const categorizePayload: ICategorizePayload = {
+    //     category: category,
+    //     stockArticleIds: this.checkedStockArticleIds
+    //   };
+    //   this.categorize(categorizePayload);
   }
 }
 </script>

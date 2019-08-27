@@ -29,6 +29,7 @@ export type QiitaState = {
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
+  isCancelingCategorization: boolean
   isLoading: boolean
   currentPage: number
   paging: Page[]
@@ -44,8 +45,10 @@ export interface QiitaGetters {
   checkedStockArticleIds: string[]
   displayCategoryId: number
   categories: Category[]
+  displayCategories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
+  isCancelingCategorization: boolean
   isLoading: boolean
 }
 
@@ -100,6 +103,7 @@ export const state = (): QiitaState => ({
   ],
   uncategorizedStocks: [],
   isCategorizing: false,
+  isCancelingCategorization: false,
   isLoading: true,
   currentPage: 1,
   paging: []
@@ -168,11 +172,19 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   categories: (state): Category[] => {
     return state.categories
   },
+  displayCategories: (state): Category[] => {
+    return state.categories.filter(
+      category => category.categoryId !== state.displayCategoryId
+    )
+  },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
   },
   isCategorizing: (state): boolean => {
     return state.isCategorizing
+  },
+  isCancelingCategorization: (state): boolean => {
+    return state.isCancelingCategorization
   },
   isLoading: (state): boolean => {
     return state.isLoading
