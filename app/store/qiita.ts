@@ -36,6 +36,12 @@ export type QiitaState = {
 
 export interface QiitaGetters {
   isLoggedIn: boolean
+  currentPage: number
+  firstPage: Page
+  prevPage: Page
+  nextPage: Page
+  lastPage: Page
+  checkedStockArticleIds: string[]
   displayCategoryId: number
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
@@ -107,6 +113,54 @@ export type UpdateCategoryPayload = {
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   isLoggedIn: (state): boolean => {
     return !!state.sessionId
+  },
+  currentPage: (state): number => {
+    return state.currentPage
+  },
+  firstPage: (state): Page => {
+    const page: Page | undefined = state.paging.find(page => {
+      return page.relation === 'first'
+    })
+
+    if (page !== undefined) {
+      return page
+    }
+    return { page: 0, perPage: 0, relation: '' }
+  },
+  prevPage: (state): Page => {
+    const page: Page | undefined = state.paging.find(page => {
+      return page.relation === 'prev'
+    })
+
+    if (page !== undefined) {
+      return page
+    }
+    return { page: 0, perPage: 0, relation: '' }
+  },
+  nextPage: (state): Page => {
+    const page: Page | undefined = state.paging.find(page => {
+      return page.relation === 'next'
+    })
+
+    if (page !== undefined) {
+      return page
+    }
+    return { page: 0, perPage: 0, relation: '' }
+  },
+  lastPage: (state): Page => {
+    const page: Page | undefined = state.paging.find(page => {
+      return page.relation === 'last'
+    })
+
+    if (page !== undefined) {
+      return page
+    }
+    return { page: 0, perPage: 0, relation: '' }
+  },
+  checkedStockArticleIds: (state): string[] => {
+    return state.uncategorizedStocks
+      .filter(stock => stock.isChecked)
+      .map(stock => stock.article_id)
   },
   displayCategoryId: (state): number => {
     return state.displayCategoryId
@@ -196,6 +250,8 @@ export const actions: DefineActions<
     page: Page = { page: state.currentPage, perPage: 20, relation: '' }
   ): Promise<void> => {
     try {
+      commit('setIsLoading', { isLoading: true })
+
       const fetchStockRequest: FetchUncategorizedStockRequest = {
         apiUrlBase: EnvConstant.apiUrlBase(),
         sessionId: state.sessionId,
@@ -223,6 +279,7 @@ export const actions: DefineActions<
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {
+      commit('setIsLoading', { isLoading: false })
       return Promise.reject(error)
     }
   },
