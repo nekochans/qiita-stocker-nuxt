@@ -77,6 +77,13 @@ export type SaveCategoryRequest = {
 
 export type SaveCategoryResponse = Category & {}
 
+export type CategorizeRequest = {
+  apiUrlBase: string
+  sessionId: string
+  categoryId: number
+  articleIds: string[]
+}
+
 export type QiitaStockApi = {
   cancelAccount(): Promise<void>
   logout(): Promise<void>
@@ -91,6 +98,7 @@ export type QiitaStockApi = {
   ): Promise<FetchUncategorizedStockResponse>
   saveCategory(request: SaveCategoryRequest): Promise<SaveCategoryResponse>
   destroyCategory(request: DestroyCategoryRequest): Promise<void>
+  categorize(request: CategorizeRequest): Promise<void>
 }
 
 export const cancelAccount = async () => {
@@ -129,4 +137,8 @@ export const destroyCategory = (
   request: DestroyCategoryRequest
 ): Promise<void> => {
   return api.destroyCategory(request)
+}
+
+export const categorize = (request: CategorizeRequest): Promise<void> => {
+  return api.categorize(request)
 }

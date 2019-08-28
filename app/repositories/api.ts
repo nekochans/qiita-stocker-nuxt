@@ -11,7 +11,8 @@ import {
   FetchCategoriesResponse,
   UpdateCategoryRequest,
   UpdateCategoryResponse,
-  DestroyCategoryRequest
+  DestroyCategoryRequest,
+  CategorizeRequest
 } from '@/domain/domain'
 
 export default class Api implements QiitaStockApi {
@@ -158,6 +159,33 @@ export default class Api implements QiitaStockApi {
           'Content-Type': 'application/json'
         }
       })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<void | never>}
+   */
+  categorize(request: CategorizeRequest): Promise<void> {
+    return axios
+      .post(
+        `${request.apiUrlBase}/api/categories/stocks`,
+        {
+          id: request.categoryId,
+          articleIds: request.articleIds
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${request.sessionId}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
       .then(() => {
         return Promise.resolve()
       })

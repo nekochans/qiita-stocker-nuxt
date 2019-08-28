@@ -13,11 +13,22 @@
         </div>
         <div class="column is-9">
           <Loading v-show="isLoading" />
+          <StockEdit
+            :is-loading="isLoading"
+            :stocks-length="uncategorizedStocks.length"
+            :is-categorizing="isCategorizing"
+            :is-canceling-categorization="isCancelingCategorization"
+            :display-categories="displayCategories"
+            :checked-stock-article-ids="checkedStockArticleIds"
+            @clickSetIsCategorizing="onSetIsCategorizing"
+            @clickCategorize="onClickCategorize"
+          />
           <StockList
             v-show="!isLoading"
             :stocks="uncategorizedStocks"
             :is-categorizing="isCategorizing"
             :is-loading="isLoading"
+            @clickCheckStock="onClickCheckStock"
           />
           <Pagination
             :is-loading="isLoading"
@@ -43,15 +54,22 @@ import SideMenu from '@/components/SideMenu.vue'
 import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
 import Pagination from '@/components/Pagination.vue'
-import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
-import { Page } from '@/domain/domain'
+import StockEdit from '@/components/StockEdit.vue'
+import {
+  mapGetters,
+  mapActions,
+  UpdateCategoryPayload,
+  CategorizePayload
+} from '@/store/qiita'
+import { Page, Category, UncategorizedStock } from '@/domain/domain'
 
 @Component({
   components: {
     SideMenu,
     StockList,
     Loading,
-    Pagination
+    Pagination,
+    StockEdit
   },
   computed: {
     ...mapGetters([
@@ -62,9 +80,11 @@ import { Page } from '@/domain/domain'
       'lastPage',
       'checkedStockArticleIds',
       'displayCategoryId',
+      'displayCategories',
       'categories',
       'uncategorizedStocks',
       'isCategorizing',
+      'isCancelingCategorization',
       'isLoading'
     ])
   },
@@ -73,7 +93,10 @@ import { Page } from '@/domain/domain'
       'fetchUncategorizedStocks',
       'saveCategory',
       'updateCategory',
-      'destroyCategory'
+      'destroyCategory',
+      'setIsCategorizing',
+      'categorize',
+      'checkStock'
     ])
   }
 })
@@ -82,6 +105,11 @@ export default class extends Vue {
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
+  setIsCategorizing!: () => void
+  categorize!: (categorizePayload: CategorizePayload) => void
+  checkStock!: (stock: UncategorizedStock) => void
+
+  checkedStockArticleIds!: string[]
 
   async fetchOtherPageStock(page: Page) {
     try {
@@ -125,6 +153,31 @@ export default class extends Vue {
   async onClickDestroyCategory(categoryId: number) {
     try {
       await this.destroyCategory(categoryId)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
+
+  onClickCheckStock(stock: UncategorizedStock) {
+    this.checkStock(stock)
+  }
+
+  onSetIsCategorizing() {
+    this.setIsCategorizing()
+  }
+
+  async onClickCategorize(category: Category) {
+    try {
+      const categorizePayload: CategorizePayload = {
+        category,
+        stockArticleIds: this.checkedStockArticleIds
+      }
+      await this.categorize(categorizePayload)
     } catch (error) {
       this.$router.push({
         name: 'original_error',

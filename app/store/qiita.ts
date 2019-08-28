@@ -9,6 +9,7 @@ import {
   fetchUncategorizedStocks,
   saveCategory,
   destroyCategory,
+  categorize,
   UncategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
@@ -20,7 +21,8 @@ import {
   Category,
   SaveCategoryRequest,
   SaveCategoryResponse,
-  DestroyCategoryRequest
+  DestroyCategoryRequest,
+  CategorizeRequest
 } from '@/domain/domain'
 
 export type QiitaState = {
@@ -29,6 +31,7 @@ export type QiitaState = {
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
+  isCancelingCategorization: boolean
   isLoading: boolean
   currentPage: number
   paging: Page[]
@@ -44,8 +47,10 @@ export interface QiitaGetters {
   checkedStockArticleIds: string[]
   displayCategoryId: number
   categories: Category[]
+  displayCategories: Category[]
   uncategorizedStocks: UncategorizedStock[]
   isCategorizing: boolean
+  isCancelingCategorization: boolean
   isLoading: boolean
 }
 
@@ -76,6 +81,16 @@ export interface QiitaMutations {
   }
   updateStockCategoryName: Category
   removeCategoryFromStock: number
+  setIsCategorizing: {}
+  checkStock: {
+    stock: UncategorizedStock
+    isChecked: boolean
+  }
+  uncheckStock: {}
+  updateStockCategory: {
+    stockArticleIds: string[]
+    category: Category
+  }
 }
 
 export interface QiitaActions {
@@ -89,17 +104,18 @@ export interface QiitaActions {
   updateCategory: UpdateCategoryPayload
   saveCategory: string
   destroyCategory: number
+  setIsCategorizing: {}
+  categorize: CategorizePayload
+  checkStock: UncategorizedStock
 }
 
 export const state = (): QiitaState => ({
   sessionId: '',
   displayCategoryId: 0,
-  categories: [
-    { categoryId: 10, name: 'category name 1' },
-    { categoryId: 20, name: 'category name 2' }
-  ],
+  categories: [],
   uncategorizedStocks: [],
   isCategorizing: false,
+  isCancelingCategorization: false,
   isLoading: true,
   currentPage: 1,
   paging: []
@@ -108,6 +124,11 @@ export const state = (): QiitaState => ({
 export type UpdateCategoryPayload = {
   stateCategory: Category
   categoryName: string
+}
+
+export type CategorizePayload = {
+  category: Category
+  stockArticleIds: string[]
 }
 
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
@@ -168,11 +189,19 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   categories: (state): Category[] => {
     return state.categories
   },
+  displayCategories: (state): Category[] => {
+    return state.categories.filter(
+      category => category.categoryId !== state.displayCategoryId
+    )
+  },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
   },
   isCategorizing: (state): boolean => {
     return state.isCategorizing
+  },
+  isCancelingCategorization: (state): boolean => {
+    return state.isCancelingCategorization
   },
   isLoading: (state): boolean => {
     return state.isLoading
@@ -223,6 +252,24 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
     state.uncategorizedStocks.map(stock => {
       if (stock.category && stock.category.categoryId === categoryId) {
         stock.category = undefined
+      }
+    })
+  },
+  setIsCategorizing: state => {
+    state.isCategorizing = !state.isCategorizing
+  },
+  checkStock: (_state, { stock, isChecked }) => {
+    stock.isChecked = isChecked
+  },
+  uncheckStock: state => {
+    state.uncategorizedStocks
+      .filter(stock => stock.isChecked)
+      .map(stock => (stock.isChecked = !stock.isChecked))
+  },
+  updateStockCategory: (state, { stockArticleIds, category }) => {
+    state.uncategorizedStocks.map(stock => {
+      if (stockArticleIds.includes(stock.article_id)) {
+        stock.category = category
       }
     })
   }
@@ -380,6 +427,36 @@ export const actions: DefineActions<
     } catch (error) {
       return Promise.reject(error)
     }
+  },
+  setIsCategorizing: ({ commit }) => {
+    commit('setIsCategorizing', {})
+  },
+  categorize: async (
+    { commit, state },
+    categorizePayload: CategorizePayload
+  ): Promise<void> => {
+    try {
+      const categorizeRequest: CategorizeRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        categoryId: categorizePayload.category.categoryId,
+        articleIds: categorizePayload.stockArticleIds
+      }
+
+      await categorize(categorizeRequest)
+      commit('uncheckStock', {})
+      // TODO カテゴライズされたストック一覧を表示する機能を作成する際に対応する
+      // commit("removeCategorizedStocks", categorizePayload.stockArticleIds);
+      commit('updateStockCategory', {
+        stockArticleIds: categorizePayload.stockArticleIds,
+        category: categorizePayload.category
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  checkStock: ({ commit }, stock: UncategorizedStock): void => {
+    commit('checkStock', { stock, isChecked: !stock.isChecked })
   }
 }
 
