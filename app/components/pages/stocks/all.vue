@@ -28,6 +28,7 @@
             :stocks="uncategorizedStocks"
             :is-categorizing="isCategorizing"
             :is-loading="isLoading"
+            @clickCheckStock="onClickCheckStock"
           />
           <Pagination
             :is-loading="isLoading"
@@ -54,8 +55,13 @@ import StockList from '@/components/StockList.vue'
 import Loading from '@/components/Loading.vue'
 import Pagination from '@/components/Pagination.vue'
 import StockEdit from '@/components/StockEdit.vue'
-import { mapGetters, mapActions, UpdateCategoryPayload } from '@/store/qiita'
-import { Page, Category } from '@/domain/domain'
+import {
+  mapGetters,
+  mapActions,
+  UpdateCategoryPayload,
+  CategorizePayload
+} from '@/store/qiita'
+import { Page, Category, UncategorizedStock } from '@/domain/domain'
 
 @Component({
   components: {
@@ -88,7 +94,9 @@ import { Page, Category } from '@/domain/domain'
       'saveCategory',
       'updateCategory',
       'destroyCategory',
-      'setIsCategorizing'
+      'setIsCategorizing',
+      'categorize',
+      'checkStock'
     ])
   }
 })
@@ -98,6 +106,10 @@ export default class extends Vue {
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
   setIsCategorizing!: () => void
+  categorize!: (categorizePayload: CategorizePayload) => void
+  checkStock!: (stock: UncategorizedStock) => void
+
+  checkedStockArticleIds!: string[]
 
   async fetchOtherPageStock(page: Page) {
     try {
@@ -151,17 +163,29 @@ export default class extends Vue {
     }
   }
 
+  onClickCheckStock(stock: UncategorizedStock) {
+    this.checkStock(stock)
+  }
+
   onSetIsCategorizing() {
     this.setIsCategorizing()
   }
 
-  onClickCategorize(category: Category) {
-    console.log(`${category} onClickCategorize`)
-    //   const categorizePayload: ICategorizePayload = {
-    //     category: category,
-    //     stockArticleIds: this.checkedStockArticleIds
-    //   };
-    //   this.categorize(categorizePayload);
+  async onClickCategorize(category: Category) {
+    try {
+      const categorizePayload: CategorizePayload = {
+        category,
+        stockArticleIds: this.checkedStockArticleIds
+      }
+      await this.categorize(categorizePayload)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 }
 </script>
