@@ -87,7 +87,8 @@ import { Page, Category } from '@/domain/domain'
       'fetchUncategorizedStocks',
       'saveCategory',
       'updateCategory',
-      'destroyCategory'
+      'destroyCategory',
+      'setIsCategorizing'
     ])
   }
 })
@@ -96,6 +97,7 @@ export default class extends Vue {
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
+  setIsCategorizing!: () => void
 
   async fetchOtherPageStock(page: Page) {
     try {
@@ -150,7 +152,7 @@ export default class extends Vue {
   }
 
   onSetIsCategorizing() {
-    console.log('onSetIsCategorizing')
+    this.setIsCategorizing()
   }
 
   onClickCategorize(category: Category) {

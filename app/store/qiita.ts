@@ -79,6 +79,7 @@ export interface QiitaMutations {
   }
   updateStockCategoryName: Category
   removeCategoryFromStock: number
+  setIsCategorizing: {}
 }
 
 export interface QiitaActions {
@@ -92,15 +93,13 @@ export interface QiitaActions {
   updateCategory: UpdateCategoryPayload
   saveCategory: string
   destroyCategory: number
+  setIsCategorizing: {}
 }
 
 export const state = (): QiitaState => ({
   sessionId: '',
   displayCategoryId: 0,
-  categories: [
-    { categoryId: 10, name: 'category name 1' },
-    { categoryId: 20, name: 'category name 2' }
-  ],
+  categories: [],
   uncategorizedStocks: [],
   isCategorizing: false,
   isCancelingCategorization: false,
@@ -237,6 +236,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
         stock.category = undefined
       }
     })
+  },
+  setIsCategorizing: state => {
+    state.isCategorizing = !state.isCategorizing
   }
 }
 
@@ -392,6 +394,9 @@ export const actions: DefineActions<
     } catch (error) {
       return Promise.reject(error)
     }
+  },
+  setIsCategorizing: ({ commit }) => {
+    commit('setIsCategorizing', {})
   }
 }
 
