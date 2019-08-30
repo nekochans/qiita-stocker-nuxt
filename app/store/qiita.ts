@@ -7,14 +7,18 @@ import {
   fetchCategories,
   updateCategory,
   fetchUncategorizedStocks,
+  fetchCategorizedStocks,
   saveCategory,
   destroyCategory,
   categorize,
   UncategorizedStock,
+  CategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
   FetchCategoriesRequest,
   FetchCategoriesResponse,
+  FetchCategorizedStockRequest,
+  FetchCategorizedStockResponse,
   UpdateCategoryRequest,
   UpdateCategoryResponse,
   FetchUncategorizedStockResponse,
@@ -30,6 +34,7 @@ export type QiitaState = {
   displayCategoryId: number
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
+  categorizedStock: CategorizedStock[]
   isCategorizing: boolean
   isCancelingCategorization: boolean
   isLoading: boolean
@@ -60,6 +65,9 @@ export interface QiitaMutations {
   }
   saveUncategorizedStocks: {
     uncategorizedStocks: UncategorizedStock[]
+  }
+  saveCategorizedStocks: {
+    categorizedStocks: CategorizedStock[]
   }
   setIsLoading: {
     isLoading: boolean
@@ -99,6 +107,7 @@ export interface QiitaActions {
   }
   cancelAction: {}
   fetchUncategorizedStocks: Page
+  fetchCategorizedStock: FetchCategorizedStockPayload
   logoutAction: {}
   fetchCategory: {}
   updateCategory: UpdateCategoryPayload
@@ -114,6 +123,7 @@ export const state = (): QiitaState => ({
   displayCategoryId: 0,
   categories: [],
   uncategorizedStocks: [],
+  categorizedStock: [],
   isCategorizing: false,
   isCancelingCategorization: false,
   isLoading: true,
@@ -129,6 +139,11 @@ export type UpdateCategoryPayload = {
 export type CategorizePayload = {
   category: Category
   stockArticleIds: string[]
+}
+
+export type FetchCategorizedStockPayload = {
+  page: Page
+  categoryId: number
 }
 
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
@@ -214,6 +229,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   saveUncategorizedStocks: (state, { uncategorizedStocks }) => {
     state.uncategorizedStocks = uncategorizedStocks
+  },
+  saveCategorizedStocks: (state, { categorizedStocks }) => {
+    state.categorizedStock = categorizedStocks
   },
   setIsLoading: (state, { isLoading }) => {
     state.isLoading = isLoading
@@ -327,6 +345,53 @@ export const actions: DefineActions<
       commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {
       commit('setIsLoading', { isLoading: false })
+      return Promise.reject(error)
+    }
+  },
+  fetchCategorizedStock: async (
+    { commit, state },
+    payload: FetchCategorizedStockPayload
+  ): Promise<void> => {
+    try {
+      commit('setIsLoading', { isLoading: true })
+
+      if (payload.page.page === 0) {
+        payload.page = {
+          page: 1,
+          perPage: 20,
+          relation: ''
+        }
+      }
+
+      const fetchCategorizedStockRequest: FetchCategorizedStockRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        categoryId: payload.categoryId,
+        page: payload.page.page,
+        parPage: payload.page.perPage
+      }
+
+      const fetchCategorizedStockResponse: FetchCategorizedStockResponse = await fetchCategorizedStocks(
+        fetchCategorizedStockRequest
+      )
+
+      const categorizedStocks: CategorizedStock[] = []
+      for (const stock of fetchCategorizedStockResponse.stocks) {
+        const date: string[] = stock.article_created_at.split(' ')
+        stock.article_created_at = date[0]
+        const categorizedStock: CategorizedStock = Object.assign(stock, {
+          isChecked: false
+        })
+        categorizedStocks.push(categorizedStock)
+      }
+
+      commit('saveCategorizedStocks', { categorizedStocks })
+      commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
+      commit('saveCurrentPage', { currentPage: payload.page.page })
+      commit('setIsLoading', { isLoading: false })
+    } catch (error) {
+      commit('setIsLoading', { isLoading: false })
+
       return Promise.reject(error)
     }
   },

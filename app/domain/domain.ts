@@ -32,6 +32,15 @@ export type Stock = {
   tags: string[]
 }
 
+export type FetchedCategorizedStock = Stock & {
+  id: number
+}
+
+export type CategorizedStock = Stock & {
+  id: number
+  isChecked: boolean
+}
+
 export type UncategorizedStock = Stock & {
   category?: Category
   isChecked: boolean
@@ -69,6 +78,19 @@ export type FetchUncategorizedStockResponse = {
   stocks: { stock: Stock; category?: Category }[]
 }
 
+export type FetchCategorizedStockRequest = {
+  apiUrlBase: string
+  sessionId: string
+  categoryId: number
+  page: number
+  parPage: number
+}
+
+export type FetchCategorizedStockResponse = {
+  paging: Page[]
+  stocks: FetchedCategorizedStock[]
+}
+
 export type SaveCategoryRequest = {
   apiUrlBase: string
   name: string
@@ -96,6 +118,9 @@ export type QiitaStockApi = {
   fetchUncategorizedStocks(
     request: FetchUncategorizedStockRequest
   ): Promise<FetchUncategorizedStockResponse>
+  fetchCategorizedStocks(
+    request: FetchCategorizedStockRequest
+  ): Promise<FetchCategorizedStockResponse>
   saveCategory(request: SaveCategoryRequest): Promise<SaveCategoryResponse>
   destroyCategory(request: DestroyCategoryRequest): Promise<void>
   categorize(request: CategorizeRequest): Promise<void>
@@ -125,6 +150,12 @@ export const fetchUncategorizedStocks = (
   request: FetchUncategorizedStockRequest
 ): Promise<FetchUncategorizedStockResponse> => {
   return api.fetchUncategorizedStocks(request)
+}
+
+export const fetchCategorizedStocks = (
+  request: FetchCategorizedStockRequest
+): Promise<FetchCategorizedStockResponse> => {
+  return api.fetchCategorizedStocks(request)
 }
 
 export const saveCategory = (
