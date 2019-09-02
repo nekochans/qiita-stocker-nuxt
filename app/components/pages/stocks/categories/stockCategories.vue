@@ -95,6 +95,7 @@ import { Page, Category, CategorizedStock } from '@/domain/domain'
   methods: {
     ...mapActions([
       'fetchCategorizedStock',
+      'fetchCategory',
       'saveCategory',
       'updateCategory',
       'destroyCategory',
@@ -110,6 +111,7 @@ export default class extends Vue {
   fetchCategorizedStock!: (
     fetchCategorizedStockPayload: FetchCategorizedStockPayload
   ) => void
+  fetchCategory!: () => void
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
@@ -117,8 +119,10 @@ export default class extends Vue {
   setIsCancelingCategorization!: () => void
   categorize!: (categorizePayload: CategorizePayload) => void
   checkStock!: (stock: CategorizedStock) => void
-  checkedCategorizedStockArticleIds!: string[]
   resetData!: () => void
+
+  checkedCategorizedStockArticleIds!: string[]
+  categories!: Category[]
 
   onClickCategory() {
     this.resetData()
@@ -215,6 +219,25 @@ export default class extends Vue {
   onClickStocksAll() {
     // TODO 全てのストック選択時の動作を追加
     // this.resetData()
+  }
+
+  async initializeCategory() {
+    try {
+      await this.fetchCategory()
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
+
+  async created() {
+    if (!this.categories.length) {
+      await this.initializeCategory()
+    }
   }
 }
 </script>
