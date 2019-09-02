@@ -523,9 +523,7 @@ export const actions: DefineActions<
       commit('removeCategory', categoryId)
       commit('removeCategoryFromStock', categoryId)
 
-      // TODO 選択中のカテゴリが削除された場合の処理を追加
-      // if (state.displayCategoryId === categoryId)
-      //   return commit("saveDisplayCategoryId", 0);
+      if (state.displayCategoryId === categoryId) return commit('resetData', {})
     } catch (error) {
       return Promise.reject(error)
     }
