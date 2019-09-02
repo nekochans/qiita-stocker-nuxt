@@ -93,6 +93,7 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
   methods: {
     ...mapActions([
       'fetchUncategorizedStocks',
+      'fetchCategory',
       'saveCategory',
       'updateCategory',
       'destroyCategory',
@@ -104,13 +105,16 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
 })
 export default class extends Vue {
   fetchUncategorizedStocks!: (page?: Page) => void
+  fetchCategory!: () => void
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
   setIsCategorizing!: () => void
   categorize!: (categorizePayload: CategorizePayload) => void
   checkStock!: (stock: UncategorizedStock) => void
+
   checkedStockArticleIds!: string[]
+  categories!: Category[]
 
   onClickCategory() {
     // 全てのストックが選択されている場合は何もしない
@@ -196,6 +200,25 @@ export default class extends Vue {
   onClickStocksAll() {
     // TODO 全てのストック選択時の動作を追加
     // this.resetData()
+  }
+
+  async initializeCategory() {
+    try {
+      await this.fetchCategory()
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
+  }
+
+  async created() {
+    if (!this.categories.length) {
+      await this.initializeCategory()
+    }
   }
 }
 </script>
