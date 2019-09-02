@@ -102,6 +102,7 @@ export interface QiitaMutations {
     stockArticleIds: string[]
     category: Category
   }
+  resetData: {}
 }
 
 export interface QiitaActions {
@@ -120,6 +121,7 @@ export interface QiitaActions {
   setIsCancelingCategorization: {}
   categorize: CategorizePayload
   checkStock: UncategorizedStock
+  resetData: {}
 }
 
 export const state = (): QiitaState => ({
@@ -305,6 +307,12 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
         stock.category = category
       }
     })
+  },
+  resetData: state => {
+    state.isCategorizing = false
+    state.isCancelingCategorization = false
+    state.displayCategoryId = 0
+    state.currentPage = 1
   }
 }
 
@@ -539,6 +547,11 @@ export const actions: DefineActions<
   },
   checkStock: ({ commit }, stock: UncategorizedStock): void => {
     commit('checkStock', { stock, isChecked: !stock.isChecked })
+  },
+  resetData: ({ commit }): void => {
+    commit('resetData', {})
+    commit('saveUncategorizedStocks', { uncategorizedStocks: [] })
+    commit('saveCategorizedStocks', { categorizedStocks: [] })
   }
 }
 

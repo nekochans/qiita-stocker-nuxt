@@ -7,8 +7,8 @@
         :key="category.categoryId"
         :category="category"
         @clickUpdateCategory="onClickUpdateCategory"
-        @clickCategory="onClickCategory"
         @clickDestroyCategory="onClickDestroyCategory"
+        @clickCategory="onClickCategory"
       />
     </ul>
   </section>

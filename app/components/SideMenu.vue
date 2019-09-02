@@ -5,6 +5,7 @@
       :categories="categories"
       @clickUpdateCategory="onClickUpdateCategory"
       @clickDestroyCategory="onClickDestroyCategory"
+      @clickCategory="onClickCategory"
     />
     <CreateCategory @clickSaveCategory="onClickSaveCategory" />
   </aside>

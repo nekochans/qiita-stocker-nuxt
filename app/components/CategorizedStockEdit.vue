@@ -82,6 +82,14 @@ export default class extends Vue {
   box-shadow: none;
 }
 
+.cancel-categorization-margin {
+  margin-right: 0.5rem;
+}
+
+.button-margin {
+  margin-bottom: 0.5rem;
+}
+
 @media screen and (max-width: 768px) {
   .stock-edit-sticky {
     border-bottom: 1px solid #e8e8e8;

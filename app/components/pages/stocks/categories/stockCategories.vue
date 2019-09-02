@@ -101,7 +101,8 @@ import { Page, Category, CategorizedStock } from '@/domain/domain'
       'setIsCategorizing',
       'setIsCancelingCategorization',
       'categorize',
-      'checkStock'
+      'checkStock',
+      'resetData'
     ])
   }
 })
@@ -117,10 +118,10 @@ export default class extends Vue {
   categorize!: (categorizePayload: CategorizePayload) => void
   checkStock!: (stock: CategorizedStock) => void
   checkedCategorizedStockArticleIds!: string[]
+  resetData!: () => void
 
   onClickCategory() {
-    // TODO カテゴリー選択時の動作を追加
-    // this.resetData();
+    this.resetData()
   }
 
   async onClickSaveCategory(categoryName: string) {
