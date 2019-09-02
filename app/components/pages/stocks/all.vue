@@ -113,8 +113,7 @@ export default class extends Vue {
   checkedStockArticleIds!: string[]
 
   onClickCategory() {
-    // TODO カテゴリー選択時の動作を追加
-    // this.resetData();
+    // 全てのストックが選択されている場合は何もしない
   }
 
   async fetchOtherPageStock(page: Page) {

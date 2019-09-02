@@ -90,7 +90,11 @@ export default class extends Vue {
   cancelButtonText: string = 'キャンセル'
 
   onClickCategory() {
-    // TODO カテゴリ選択時の処理を追加
+    if (this.editing || this.isSelecting) return
+
+    const categoryId: string = String(this.category.categoryId)
+    this.$emit('clickCategory')
+    this.$router.push({ path: `/stocks/categories/${categoryId}` })
   }
 
   doneEdit() {
@@ -131,12 +135,9 @@ export default class extends Vue {
     this.showConfirmation = false
     this.$emit('clickDestroyCategory', this.category.categoryId)
 
-    // TODO 選択中のカテゴリが削除された場合は全てのストックを表示する
-    // if (this.isSelecting) {
-    //   this.$router.push({
-    //     name: 'stocks'
-    //   })
-    // }
+    if (this.isSelecting) {
+      this.$router.push({ path: `/stocks/all` })
+    }
   }
 
   cancelDestroy(): void {
@@ -145,6 +146,15 @@ export default class extends Vue {
 
   buildConfirmMessage(categoryName: string): string {
     return `${categoryName} を削除してもよろしいですか？`
+  }
+
+  initializeIsSelecting() {
+    const query: any = this.$route.params
+    this.isSelecting = String(this.category.categoryId) === query.id
+  }
+
+  created() {
+    this.initializeIsSelecting()
   }
 }
 </script>

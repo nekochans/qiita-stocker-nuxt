@@ -32,6 +32,10 @@ export default class extends Vue {
   @Prop()
   categories!: Category[]
 
+  onClickCategory() {
+    this.$emit('clickCategory')
+  }
+
   onClickSaveCategory(category: string) {
     this.$emit('clickSaveCategory', category)
   }
