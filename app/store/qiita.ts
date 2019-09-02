@@ -7,14 +7,18 @@ import {
   fetchCategories,
   updateCategory,
   fetchUncategorizedStocks,
+  fetchCategorizedStocks,
   saveCategory,
   destroyCategory,
   categorize,
   UncategorizedStock,
+  CategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
   FetchCategoriesRequest,
   FetchCategoriesResponse,
+  FetchCategorizedStockRequest,
+  FetchCategorizedStockResponse,
   UpdateCategoryRequest,
   UpdateCategoryResponse,
   FetchUncategorizedStockResponse,
@@ -30,6 +34,7 @@ export type QiitaState = {
   displayCategoryId: number
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
+  categorizedStocks: CategorizedStock[]
   isCategorizing: boolean
   isCancelingCategorization: boolean
   isLoading: boolean
@@ -45,10 +50,12 @@ export interface QiitaGetters {
   nextPage: Page
   lastPage: Page
   checkedStockArticleIds: string[]
+  checkedCategorizedStockArticleIds: string[]
   displayCategoryId: number
   categories: Category[]
   displayCategories: Category[]
   uncategorizedStocks: UncategorizedStock[]
+  categorizedStocks: CategorizedStock[]
   isCategorizing: boolean
   isCancelingCategorization: boolean
   isLoading: boolean
@@ -61,11 +68,20 @@ export interface QiitaMutations {
   saveUncategorizedStocks: {
     uncategorizedStocks: UncategorizedStock[]
   }
+  saveCategorizedStocks: {
+    categorizedStocks: CategorizedStock[]
+  }
+  removeCategorizedStocks: {
+    stockArticleIds: string[]
+  }
   setIsLoading: {
     isLoading: boolean
   }
   saveCurrentPage: {
     currentPage: number
+  }
+  saveDisplayCategoryId: {
+    categoryId: number
   }
   savePaging: {
     paging: Page[]
@@ -82,6 +98,7 @@ export interface QiitaMutations {
   updateStockCategoryName: Category
   removeCategoryFromStock: number
   setIsCategorizing: {}
+  setIsCancelingCategorization: {}
   checkStock: {
     stock: UncategorizedStock
     isChecked: boolean
@@ -91,6 +108,7 @@ export interface QiitaMutations {
     stockArticleIds: string[]
     category: Category
   }
+  resetData: {}
 }
 
 export interface QiitaActions {
@@ -99,14 +117,18 @@ export interface QiitaActions {
   }
   cancelAction: {}
   fetchUncategorizedStocks: Page
+  fetchCategorizedStock: FetchCategorizedStockPayload
   logoutAction: {}
   fetchCategory: {}
   updateCategory: UpdateCategoryPayload
   saveCategory: string
   destroyCategory: number
   setIsCategorizing: {}
+  setIsCancelingCategorization: {}
   categorize: CategorizePayload
   checkStock: UncategorizedStock
+  saveDisplayCategoryId: number
+  resetData: {}
 }
 
 export const state = (): QiitaState => ({
@@ -114,9 +136,10 @@ export const state = (): QiitaState => ({
   displayCategoryId: 0,
   categories: [],
   uncategorizedStocks: [],
+  categorizedStocks: [],
   isCategorizing: false,
   isCancelingCategorization: false,
-  isLoading: true,
+  isLoading: false,
   currentPage: 1,
   paging: []
 })
@@ -129,6 +152,11 @@ export type UpdateCategoryPayload = {
 export type CategorizePayload = {
   category: Category
   stockArticleIds: string[]
+}
+
+export type FetchCategorizedStockPayload = {
+  page: Page
+  categoryId: number
 }
 
 export const getters: DefineGetters<QiitaGetters, QiitaState> = {
@@ -183,6 +211,11 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
       .filter(stock => stock.isChecked)
       .map(stock => stock.article_id)
   },
+  checkedCategorizedStockArticleIds: (state): string[] => {
+    return state.categorizedStocks
+      .filter(categorizedStock => categorizedStock.isChecked)
+      .map(categorizedStock => categorizedStock.article_id)
+  },
   displayCategoryId: (state): number => {
     return state.displayCategoryId
   },
@@ -196,6 +229,9 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
+  },
+  categorizedStocks: (state): CategorizedStock[] => {
+    return state.categorizedStocks
   },
   isCategorizing: (state): boolean => {
     return state.isCategorizing
@@ -215,11 +251,22 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   saveUncategorizedStocks: (state, { uncategorizedStocks }) => {
     state.uncategorizedStocks = uncategorizedStocks
   },
+  saveCategorizedStocks: (state, { categorizedStocks }) => {
+    state.categorizedStocks = categorizedStocks
+  },
+  removeCategorizedStocks: (state, { stockArticleIds }) => {
+    state.categorizedStocks = state.categorizedStocks.filter(
+      categorizedStock => !stockArticleIds.includes(categorizedStock.article_id)
+    )
+  },
   setIsLoading: (state, { isLoading }) => {
     state.isLoading = isLoading
   },
   saveCurrentPage: (state, { currentPage }) => {
     state.currentPage = currentPage
+  },
+  saveDisplayCategoryId: (state, { categoryId }) => {
+    state.displayCategoryId = categoryId
   },
   savePaging: (state, { paging }) => {
     state.paging = paging
@@ -258,6 +305,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   setIsCategorizing: state => {
     state.isCategorizing = !state.isCategorizing
   },
+  setIsCancelingCategorization: state => {
+    state.isCancelingCategorization = !state.isCancelingCategorization
+  },
   checkStock: (_state, { stock, isChecked }) => {
     stock.isChecked = isChecked
   },
@@ -272,6 +322,12 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
         stock.category = category
       }
     })
+  },
+  resetData: state => {
+    state.isCategorizing = false
+    state.isCancelingCategorization = false
+    state.displayCategoryId = 0
+    state.currentPage = 1
   }
 }
 
@@ -325,6 +381,52 @@ export const actions: DefineActions<
       commit('setIsLoading', { isLoading: false })
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
+    } catch (error) {
+      commit('setIsLoading', { isLoading: false })
+      return Promise.reject(error)
+    }
+  },
+  fetchCategorizedStock: async (
+    { commit, state },
+    payload: FetchCategorizedStockPayload
+  ): Promise<void> => {
+    try {
+      commit('setIsLoading', { isLoading: true })
+
+      if (payload.page.page === 0) {
+        payload.page = {
+          page: 1,
+          perPage: 20,
+          relation: ''
+        }
+      }
+
+      const fetchCategorizedStockRequest: FetchCategorizedStockRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        categoryId: payload.categoryId,
+        page: payload.page.page,
+        parPage: payload.page.perPage
+      }
+
+      const fetchCategorizedStockResponse: FetchCategorizedStockResponse = await fetchCategorizedStocks(
+        fetchCategorizedStockRequest
+      )
+
+      const categorizedStocks: CategorizedStock[] = []
+      for (const stock of fetchCategorizedStockResponse.stocks) {
+        const date: string[] = stock.article_created_at.split(' ')
+        stock.article_created_at = date[0]
+        const categorizedStock: CategorizedStock = Object.assign(stock, {
+          isChecked: false
+        })
+        categorizedStocks.push(categorizedStock)
+      }
+
+      commit('saveCategorizedStocks', { categorizedStocks })
+      commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
+      commit('saveCurrentPage', { currentPage: payload.page.page })
+      commit('setIsLoading', { isLoading: false })
     } catch (error) {
       commit('setIsLoading', { isLoading: false })
       return Promise.reject(error)
@@ -421,15 +523,16 @@ export const actions: DefineActions<
       commit('removeCategory', categoryId)
       commit('removeCategoryFromStock', categoryId)
 
-      // TODO 選択中のカテゴリが削除された場合の処理を追加
-      // if (state.displayCategoryId === categoryId)
-      //   return commit("saveDisplayCategoryId", 0);
+      if (state.displayCategoryId === categoryId) return commit('resetData', {})
     } catch (error) {
       return Promise.reject(error)
     }
   },
   setIsCategorizing: ({ commit }) => {
     commit('setIsCategorizing', {})
+  },
+  setIsCancelingCategorization: ({ commit }) => {
+    commit('setIsCancelingCategorization', {})
   },
   categorize: async (
     { commit, state },
@@ -445,8 +548,9 @@ export const actions: DefineActions<
 
       await categorize(categorizeRequest)
       commit('uncheckStock', {})
-      // TODO カテゴライズされたストック一覧を表示する機能を作成する際に対応する
-      // commit("removeCategorizedStocks", categorizePayload.stockArticleIds);
+      commit('removeCategorizedStocks', {
+        stockArticleIds: categorizePayload.stockArticleIds
+      })
       commit('updateStockCategory', {
         stockArticleIds: categorizePayload.stockArticleIds,
         category: categorizePayload.category
@@ -457,6 +561,14 @@ export const actions: DefineActions<
   },
   checkStock: ({ commit }, stock: UncategorizedStock): void => {
     commit('checkStock', { stock, isChecked: !stock.isChecked })
+  },
+  saveDisplayCategoryId: ({ commit }, categoryId: number): void => {
+    commit('saveDisplayCategoryId', { categoryId })
+  },
+  resetData: ({ commit }): void => {
+    commit('resetData', {})
+    commit('saveUncategorizedStocks', { uncategorizedStocks: [] })
+    commit('saveCategorizedStocks', { categorizedStocks: [] })
   }
 }
 

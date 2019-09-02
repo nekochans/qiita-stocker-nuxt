@@ -15,28 +15,29 @@
         </div>
         <div class="column is-9">
           <Loading v-show="isLoading" />
-          <StockEdit
+          <CategorizedStockEdit
             :is-loading="isLoading"
-            :stocks-length="uncategorizedStocks.length"
+            :stocks-length="categorizedStocks.length"
             :is-categorizing="isCategorizing"
             :is-canceling-categorization="isCancelingCategorization"
             :display-categories="displayCategories"
-            :checked-stock-article-ids="checkedStockArticleIds"
+            :checked-stock-article-ids="checkedCategorizedStockArticleIds"
             @clickSetIsCategorizing="onSetIsCategorizing"
+            @clickSetIsCancelingCategorization="onSetIsCancelingCategorization"
             @clickCategorize="onClickCategorize"
           />
-          <StockList
+          <CategorizedStockList
             v-show="!isLoading"
-            :stocks="uncategorizedStocks"
+            :stocks="categorizedStocks"
             :is-categorizing="isCategorizing"
-            :is-loading="isLoading"
             @clickCheckStock="onClickCheckStock"
+            @clickCancelCategorization="onClickCancelCategorization"
           />
           <Pagination
             :is-loading="isLoading"
             :is-categorizing="isCategorizing"
-            :checked-stock-article-ids="checkedStockArticleIds"
-            :stocks-length="uncategorizedStocks.length"
+            :checked-stock-article-ids="checkedCategorizedStockArticleIds"
+            :stocks-length="categorizedStocks.length"
             :current-page="currentPage"
             :first-page="firstPage"
             :prev-page="prevPage"
@@ -53,25 +54,26 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import SideMenu from '@/components/SideMenu.vue'
-import StockList from '@/components/StockList.vue'
+import CategorizedStockList from '@/components/CategorizedStockList.vue'
 import Loading from '@/components/Loading.vue'
 import Pagination from '@/components/Pagination.vue'
-import StockEdit from '@/components/StockEdit.vue'
+import CategorizedStockEdit from '@/components/CategorizedStockEdit.vue'
 import {
   mapGetters,
   mapActions,
   UpdateCategoryPayload,
-  CategorizePayload
+  CategorizePayload,
+  FetchCategorizedStockPayload
 } from '@/store/qiita'
-import { Page, Category, UncategorizedStock } from '@/domain/domain'
+import { Page, Category, CategorizedStock } from '@/domain/domain'
 
 @Component({
   components: {
     SideMenu,
-    StockList,
+    CategorizedStockList,
     Loading,
     Pagination,
-    StockEdit
+    CategorizedStockEdit
   },
   computed: {
     ...mapGetters([
@@ -80,11 +82,11 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
       'prevPage',
       'nextPage',
       'lastPage',
-      'checkedStockArticleIds',
+      'checkedCategorizedStockArticleIds',
       'displayCategoryId',
       'displayCategories',
       'categories',
-      'uncategorizedStocks',
+      'categorizedStocks',
       'isCategorizing',
       'isCancelingCategorization',
       'isLoading'
@@ -92,45 +94,38 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
   },
   methods: {
     ...mapActions([
-      'fetchUncategorizedStocks',
+      'fetchCategorizedStock',
       'fetchCategory',
       'saveCategory',
       'updateCategory',
       'destroyCategory',
       'setIsCategorizing',
+      'setIsCancelingCategorization',
       'categorize',
-      'checkStock'
+      'checkStock',
+      'resetData'
     ])
   }
 })
 export default class extends Vue {
-  fetchUncategorizedStocks!: (page?: Page) => void
+  fetchCategorizedStock!: (
+    fetchCategorizedStockPayload: FetchCategorizedStockPayload
+  ) => void
   fetchCategory!: () => void
   saveCategory!: (category: string) => void
   updateCategory!: (updateCategoryPayload: UpdateCategoryPayload) => void
   destroyCategory!: (categoryId: number) => void
   setIsCategorizing!: () => void
+  setIsCancelingCategorization!: () => void
   categorize!: (categorizePayload: CategorizePayload) => void
-  checkStock!: (stock: UncategorizedStock) => void
+  checkStock!: (stock: CategorizedStock) => void
+  resetData!: () => void
 
-  checkedStockArticleIds!: string[]
+  checkedCategorizedStockArticleIds!: string[]
   categories!: Category[]
 
   onClickCategory() {
-    // 全てのストックが選択されている場合は何もしない
-  }
-
-  async fetchOtherPageStock(page: Page) {
-    try {
-      await this.fetchUncategorizedStocks(page)
-    } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
-      })
-    }
+    this.resetData()
   }
 
   async onClickSaveCategory(categoryName: string) {
@@ -172,19 +167,11 @@ export default class extends Vue {
     }
   }
 
-  onClickCheckStock(stock: UncategorizedStock) {
-    this.checkStock(stock)
-  }
-
-  onSetIsCategorizing() {
-    this.setIsCategorizing()
-  }
-
   async onClickCategorize(category: Category) {
     try {
       const categorizePayload: CategorizePayload = {
         category,
-        stockArticleIds: this.checkedStockArticleIds
+        stockArticleIds: this.checkedCategorizedStockArticleIds
       }
       await this.categorize(categorizePayload)
     } catch (error) {
@@ -195,6 +182,38 @@ export default class extends Vue {
         }
       })
     }
+  }
+
+  onClickCancelCategorization(categorizedStockId: number) {
+    // TODO カテゴライズ解除ボタン押下時の動作を追加
+    console.log(`${categorizedStockId} onClickCancelCategorization`)
+    // this.cancelCategorization(categorizedStockId);
+  }
+
+  onClickCheckStock(stock: CategorizedStock) {
+    this.checkStock(stock)
+  }
+
+  fetchOtherPageStock(page: Page) {
+    console.log(`${page} fetchOtherPageStock`)
+    // try {
+    //   await this.fetchUncategorizedStocks(page)
+    // } catch (error) {
+    //   this.$router.push({
+    //     name: 'original_error',
+    //     params: {
+    //       message: error.message
+    //     }
+    //   })
+    // }
+  }
+
+  onSetIsCategorizing() {
+    this.setIsCategorizing()
+  }
+
+  onSetIsCancelingCategorization() {
+    this.setIsCancelingCategorization()
   }
 
   onClickStocksAll() {

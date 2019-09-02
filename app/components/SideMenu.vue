@@ -5,6 +5,7 @@
       :categories="categories"
       @clickUpdateCategory="onClickUpdateCategory"
       @clickDestroyCategory="onClickDestroyCategory"
+      @clickCategory="onClickCategory"
     />
     <CreateCategory @clickSaveCategory="onClickSaveCategory" />
   </aside>
@@ -31,6 +32,10 @@ export default class extends Vue {
 
   @Prop()
   categories!: Category[]
+
+  onClickCategory() {
+    this.$emit('clickCategory')
+  }
 
   onClickSaveCategory(category: string) {
     this.$emit('clickSaveCategory', category)

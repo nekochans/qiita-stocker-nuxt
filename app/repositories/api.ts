@@ -5,6 +5,8 @@ import {
   Page,
   FetchUncategorizedStockRequest,
   FetchUncategorizedStockResponse,
+  FetchCategorizedStockRequest,
+  FetchCategorizedStockResponse,
   SaveCategoryRequest,
   SaveCategoryResponse,
   FetchCategoriesRequest,
@@ -112,6 +114,34 @@ export default class Api implements QiitaStockApi {
         const paging: Page[] = this.parseLinkHeader(linkHeader)
 
         const response: FetchUncategorizedStockResponse = {
+          stocks: axiosResponse.data,
+          paging
+        }
+
+        return Promise.resolve(response)
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
+      })
+  }
+
+  fetchCategorizedStocks(
+    request: FetchCategorizedStockRequest
+  ): Promise<FetchCategorizedStockResponse> {
+    return axios
+      .get<FetchCategorizedStockResponse>(
+        `${request.apiUrlBase}/api/stocks/categories/${request.categoryId}?page=${request.page}&per_page=${request.parPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${request.sessionId}`
+          }
+        }
+      )
+      .then((axiosResponse: AxiosResponse) => {
+        const linkHeader: string = axiosResponse.headers.link
+        const paging: Page[] = this.parseLinkHeader(linkHeader)
+
+        const response: FetchCategorizedStockResponse = {
           stocks: axiosResponse.data,
           paging
         }

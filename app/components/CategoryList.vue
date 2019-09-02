@@ -7,8 +7,8 @@
         :key="category.categoryId"
         :category="category"
         @clickUpdateCategory="onClickUpdateCategory"
-        @clickCategory="onClickCategory"
         @clickDestroyCategory="onClickDestroyCategory"
+        @clickCategory="onClickCategory"
       />
     </ul>
   </section>
@@ -30,7 +30,7 @@ export default class extends Vue {
   categories!: Category[]
 
   onClickCategory() {
-    // TODO カテゴリ選択時の処理を追加
+    this.$emit('clickCategory')
   }
 
   onClickUpdateCategory(updateCategoryPayload: UpdateCategoryPayload) {
