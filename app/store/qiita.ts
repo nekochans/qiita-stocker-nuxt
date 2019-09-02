@@ -34,7 +34,7 @@ export type QiitaState = {
   displayCategoryId: number
   categories: Category[]
   uncategorizedStocks: UncategorizedStock[]
-  categorizedStock: CategorizedStock[]
+  categorizedStocks: CategorizedStock[]
   isCategorizing: boolean
   isCancelingCategorization: boolean
   isLoading: boolean
@@ -50,10 +50,12 @@ export interface QiitaGetters {
   nextPage: Page
   lastPage: Page
   checkedStockArticleIds: string[]
+  checkedCategorizedStockArticleIds: string[]
   displayCategoryId: number
   categories: Category[]
   displayCategories: Category[]
   uncategorizedStocks: UncategorizedStock[]
+  categorizedStocks: CategorizedStock[]
   isCategorizing: boolean
   isCancelingCategorization: boolean
   isLoading: boolean
@@ -90,6 +92,7 @@ export interface QiitaMutations {
   updateStockCategoryName: Category
   removeCategoryFromStock: number
   setIsCategorizing: {}
+  setIsCancelingCategorization: {}
   checkStock: {
     stock: UncategorizedStock
     isChecked: boolean
@@ -114,6 +117,7 @@ export interface QiitaActions {
   saveCategory: string
   destroyCategory: number
   setIsCategorizing: {}
+  setIsCancelingCategorization: {}
   categorize: CategorizePayload
   checkStock: UncategorizedStock
 }
@@ -123,10 +127,10 @@ export const state = (): QiitaState => ({
   displayCategoryId: 0,
   categories: [],
   uncategorizedStocks: [],
-  categorizedStock: [],
+  categorizedStocks: [],
   isCategorizing: false,
   isCancelingCategorization: false,
-  isLoading: true,
+  isLoading: false,
   currentPage: 1,
   paging: []
 })
@@ -198,6 +202,11 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
       .filter(stock => stock.isChecked)
       .map(stock => stock.article_id)
   },
+  checkedCategorizedStockArticleIds: (state): string[] => {
+    return state.categorizedStocks
+      .filter(categorizedStock => categorizedStock.isChecked)
+      .map(categorizedStock => categorizedStock.article_id)
+  },
   displayCategoryId: (state): number => {
     return state.displayCategoryId
   },
@@ -211,6 +220,9 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   },
   uncategorizedStocks: (state): UncategorizedStock[] => {
     return state.uncategorizedStocks
+  },
+  categorizedStocks: (state): CategorizedStock[] => {
+    return state.categorizedStocks
   },
   isCategorizing: (state): boolean => {
     return state.isCategorizing
@@ -231,7 +243,7 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
     state.uncategorizedStocks = uncategorizedStocks
   },
   saveCategorizedStocks: (state, { categorizedStocks }) => {
-    state.categorizedStock = categorizedStocks
+    state.categorizedStocks = categorizedStocks
   },
   setIsLoading: (state, { isLoading }) => {
     state.isLoading = isLoading
@@ -275,6 +287,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   setIsCategorizing: state => {
     state.isCategorizing = !state.isCategorizing
+  },
+  setIsCancelingCategorization: state => {
+    state.isCancelingCategorization = !state.isCancelingCategorization
   },
   checkStock: (_state, { stock, isChecked }) => {
     stock.isChecked = isChecked
@@ -391,7 +406,6 @@ export const actions: DefineActions<
       commit('setIsLoading', { isLoading: false })
     } catch (error) {
       commit('setIsLoading', { isLoading: false })
-
       return Promise.reject(error)
     }
   },
@@ -495,6 +509,9 @@ export const actions: DefineActions<
   },
   setIsCategorizing: ({ commit }) => {
     commit('setIsCategorizing', {})
+  },
+  setIsCancelingCategorization: ({ commit }) => {
+    commit('setIsCancelingCategorization', {})
   },
   categorize: async (
     { commit, state },
