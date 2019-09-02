@@ -71,6 +71,9 @@ export interface QiitaMutations {
   saveCategorizedStocks: {
     categorizedStocks: CategorizedStock[]
   }
+  removeCategorizedStocks: {
+    stockArticleIds: string[]
+  }
   setIsLoading: {
     isLoading: boolean
   }
@@ -246,6 +249,11 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   saveCategorizedStocks: (state, { categorizedStocks }) => {
     state.categorizedStocks = categorizedStocks
+  },
+  removeCategorizedStocks: (state, { stockArticleIds }) => {
+    state.categorizedStocks = state.categorizedStocks.filter(
+      categorizedStock => !stockArticleIds.includes(categorizedStock.article_id)
+    )
   },
   setIsLoading: (state, { isLoading }) => {
     state.isLoading = isLoading
@@ -535,8 +543,9 @@ export const actions: DefineActions<
 
       await categorize(categorizeRequest)
       commit('uncheckStock', {})
-      // TODO カテゴライズされたストック一覧を表示する機能を作成する際に対応する
-      // commit("removeCategorizedStocks", categorizePayload.stockArticleIds);
+      commit('removeCategorizedStocks', {
+        stockArticleIds: categorizePayload.stockArticleIds
+      })
       commit('updateStockCategory', {
         stockArticleIds: categorizePayload.stockArticleIds,
         category: categorizePayload.category
