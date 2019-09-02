@@ -80,6 +80,9 @@ export interface QiitaMutations {
   saveCurrentPage: {
     currentPage: number
   }
+  saveDisplayCategoryId: {
+    categoryId: number
+  }
   savePaging: {
     paging: Page[]
   }
@@ -124,6 +127,7 @@ export interface QiitaActions {
   setIsCancelingCategorization: {}
   categorize: CategorizePayload
   checkStock: UncategorizedStock
+  saveDisplayCategoryId: number
   resetData: {}
 }
 
@@ -260,6 +264,9 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   saveCurrentPage: (state, { currentPage }) => {
     state.currentPage = currentPage
+  },
+  saveDisplayCategoryId: (state, { categoryId }) => {
+    state.displayCategoryId = categoryId
   },
   savePaging: (state, { paging }) => {
     state.paging = paging
@@ -556,6 +563,9 @@ export const actions: DefineActions<
   },
   checkStock: ({ commit }, stock: UncategorizedStock): void => {
     commit('checkStock', { stock, isChecked: !stock.isChecked })
+  },
+  saveDisplayCategoryId: ({ commit }, categoryId: number): void => {
+    commit('saveDisplayCategoryId', { categoryId })
   },
   resetData: ({ commit }): void => {
     commit('resetData', {})

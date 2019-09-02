@@ -30,6 +30,7 @@ export default class extends Vue {
         'qiita/fetchCategorizedStock',
         fetchCategorizedStockPayload
       )
+      await store.dispatch('qiita/saveDisplayCategoryId', categoryId)
     } catch (e) {
       error({
         statusCode: e.code,
