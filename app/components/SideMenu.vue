@@ -1,6 +1,9 @@
 <template>
   <aside class="submenu menu">
-    <DefaultMenuList :display-category-id="displayCategoryId" />
+    <DefaultMenuList
+      :display-category-id="displayCategoryId"
+      @clickStocksAll="onClickStocksAll"
+    />
     <CategoryList
       :categories="categories"
       @clickUpdateCategory="onClickUpdateCategory"
@@ -47,6 +50,10 @@ export default class extends Vue {
 
   onClickDestroyCategory(categoryId: number) {
     this.$emit('clickDestroyCategory', categoryId)
+  }
+
+  onClickStocksAll() {
+    this.$emit('clickStocksAll')
   }
 }
 </script>

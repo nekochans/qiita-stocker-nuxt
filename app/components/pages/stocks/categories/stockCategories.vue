@@ -217,8 +217,7 @@ export default class extends Vue {
   }
 
   onClickStocksAll() {
-    // TODO 全てのストック選択時の動作を追加
-    // this.resetData()
+    this.resetData()
   }
 
   async initializeCategory() {

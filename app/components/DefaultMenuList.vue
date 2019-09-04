@@ -20,7 +20,7 @@ export default class extends Vue {
 
   handleClick() {
     this.$emit('clickStocksAll')
-    this.$router.push({ path: `/stocks/all` })
+    this.$router.push({ path: '/stocks/all' })
   }
 
   isSelecting() {
