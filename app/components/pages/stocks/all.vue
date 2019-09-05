@@ -29,7 +29,6 @@
             v-show="!isLoading"
             :stocks="uncategorizedStocks"
             :is-categorizing="isCategorizing"
-            :is-loading="isLoading"
             @clickCheckStock="onClickCheckStock"
           />
           <Pagination
