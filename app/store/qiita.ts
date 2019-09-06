@@ -326,7 +326,6 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   resetData: state => {
     state.isCategorizing = false
     state.isCancelingCategorization = false
-    state.displayCategoryId = 0
     state.currentPage = 1
   }
 }
@@ -523,7 +522,10 @@ export const actions: DefineActions<
       commit('removeCategory', categoryId)
       commit('removeCategoryFromStock', categoryId)
 
-      if (state.displayCategoryId === categoryId) return commit('resetData', {})
+      if (state.displayCategoryId === categoryId) {
+        commit('saveDisplayCategoryId', { categoryId: 0 })
+        commit('resetData', {})
+      }
     } catch (error) {
       return Promise.reject(error)
     }

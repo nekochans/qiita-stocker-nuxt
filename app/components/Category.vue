@@ -136,7 +136,7 @@ export default class extends Vue {
     this.$emit('clickDestroyCategory', this.category.categoryId)
 
     if (this.isSelecting) {
-      this.$router.push({ path: `/stocks/all` })
+      this.$router.push({ path: '/stocks/all' })
     }
   }
 

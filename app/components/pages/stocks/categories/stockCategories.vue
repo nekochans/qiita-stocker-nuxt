@@ -123,6 +123,7 @@ export default class extends Vue {
 
   checkedCategorizedStockArticleIds!: string[]
   categories!: Category[]
+  displayCategoryId!: number
 
   onClickCategory() {
     this.resetData()
@@ -194,18 +195,21 @@ export default class extends Vue {
     this.checkStock(stock)
   }
 
-  fetchOtherPageStock(page: Page) {
-    console.log(`${page} fetchOtherPageStock`)
-    // try {
-    //   await this.fetchUncategorizedStocks(page)
-    // } catch (error) {
-    //   this.$router.push({
-    //     name: 'original_error',
-    //     params: {
-    //       message: error.message
-    //     }
-    //   })
-    // }
+  async fetchOtherPageStock(page: Page) {
+    try {
+      const fetchCategorizedStockPayload = {
+        page,
+        categoryId: this.displayCategoryId
+      }
+      await this.fetchCategorizedStock(fetchCategorizedStockPayload)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 
   onSetIsCategorizing() {
@@ -217,8 +221,7 @@ export default class extends Vue {
   }
 
   onClickStocksAll() {
-    // TODO 全てのストック選択時の動作を追加
-    // this.resetData()
+    this.resetData()
   }
 
   async initializeCategory() {

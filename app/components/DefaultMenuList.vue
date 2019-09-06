@@ -19,7 +19,8 @@ export default class extends Vue {
   displayCategoryId!: number
 
   handleClick() {
-    // TODO 全てのストックを選択時の処理を作成
+    this.$emit('clickStocksAll')
+    this.$router.push({ path: '/stocks/all' })
   }
 
   isSelecting() {

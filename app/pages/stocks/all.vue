@@ -19,6 +19,7 @@ export default class extends Vue {
   async fetch({ store, error }: NuxtContext) {
     try {
       await store.dispatch('qiita/fetchUncategorizedStocks')
+      await store.dispatch('qiita/saveDisplayCategoryId', 0)
     } catch (e) {
       error({
         statusCode: e.code,

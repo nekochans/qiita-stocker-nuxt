@@ -29,7 +29,6 @@
             v-show="!isLoading"
             :stocks="uncategorizedStocks"
             :is-categorizing="isCategorizing"
-            :is-loading="isLoading"
             @clickCheckStock="onClickCheckStock"
           />
           <Pagination
@@ -99,7 +98,8 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
       'destroyCategory',
       'setIsCategorizing',
       'categorize',
-      'checkStock'
+      'checkStock',
+      'resetData'
     ])
   }
 })
@@ -112,12 +112,13 @@ export default class extends Vue {
   setIsCategorizing!: () => void
   categorize!: (categorizePayload: CategorizePayload) => void
   checkStock!: (stock: UncategorizedStock) => void
+  resetData!: () => void
 
   checkedStockArticleIds!: string[]
   categories!: Category[]
 
   onClickCategory() {
-    // 全てのストックが選択されている場合は何もしない
+    this.resetData()
   }
 
   async fetchOtherPageStock(page: Page) {
@@ -198,8 +199,7 @@ export default class extends Vue {
   }
 
   onClickStocksAll() {
-    // TODO 全てのストック選択時の動作を追加
-    // this.resetData()
+    this.resetData()
   }
 
   async initializeCategory() {
