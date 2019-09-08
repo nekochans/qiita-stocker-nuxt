@@ -11,12 +11,14 @@ import {
   saveCategory,
   destroyCategory,
   categorize,
+  cancelCategorization,
   UncategorizedStock,
   CategorizedStock,
   FetchUncategorizedStockRequest,
   Page,
   FetchCategoriesRequest,
   FetchCategoriesResponse,
+  CancelCategorizationRequest,
   FetchCategorizedStockRequest,
   FetchCategorizedStockResponse,
   UpdateCategoryRequest,
@@ -74,6 +76,9 @@ export interface QiitaMutations {
   removeCategorizedStocks: {
     stockArticleIds: string[]
   }
+  removeCategorizedStocksById: {
+    categorizedStockId: number
+  }
   setIsLoading: {
     isLoading: boolean
   }
@@ -126,6 +131,7 @@ export interface QiitaActions {
   setIsCategorizing: {}
   setIsCancelingCategorization: {}
   categorize: CategorizePayload
+  cancelCategorization: number
   checkStock: UncategorizedStock
   saveDisplayCategoryId: number
   resetData: {}
@@ -257,6 +263,11 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   removeCategorizedStocks: (state, { stockArticleIds }) => {
     state.categorizedStocks = state.categorizedStocks.filter(
       categorizedStock => !stockArticleIds.includes(categorizedStock.article_id)
+    )
+  },
+  removeCategorizedStocksById: (state, { categorizedStockId }) => {
+    state.categorizedStocks = state.categorizedStocks.filter(
+      categorizedStock => categorizedStock.id !== categorizedStockId
     )
   },
   setIsLoading: (state, { isLoading }) => {
@@ -557,6 +568,23 @@ export const actions: DefineActions<
         stockArticleIds: categorizePayload.stockArticleIds,
         category: categorizePayload.category
       })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  },
+  cancelCategorization: async (
+    { commit, state },
+    categorizedStockId: number
+  ): Promise<void> => {
+    try {
+      const cancelCategorizationRequest: CancelCategorizationRequest = {
+        apiUrlBase: EnvConstant.apiUrlBase(),
+        sessionId: state.sessionId,
+        id: categorizedStockId
+      }
+
+      await cancelCategorization(cancelCategorizationRequest)
+      commit('removeCategorizedStocksById', { categorizedStockId })
     } catch (error) {
       return Promise.reject(error)
     }

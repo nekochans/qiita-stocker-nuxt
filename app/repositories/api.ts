@@ -7,6 +7,7 @@ import {
   FetchUncategorizedStockResponse,
   FetchCategorizedStockRequest,
   FetchCategorizedStockResponse,
+  CancelCategorizationRequest,
   SaveCategoryRequest,
   SaveCategoryResponse,
   FetchCategoriesRequest,
@@ -216,6 +217,25 @@ export default class Api implements QiitaStockApi {
           }
         }
       )
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch((axiosError: QiitaStockerError) => {
+        return Promise.reject(axiosError.response.data)
+      })
+  }
+
+  /**
+   * @param request
+   * @return {Promise<void | never>}
+   */
+  cancelCategorization(request: CancelCategorizationRequest): Promise<void> {
+    return axios
+      .delete(`${request.apiUrlBase}/api/categories/stocks/${request.id}`, {
+        headers: {
+          Authorization: `Bearer ${request.sessionId}`
+        }
+      })
       .then(() => {
         return Promise.resolve()
       })
