@@ -30,6 +30,7 @@
             v-show="!isLoading"
             :stocks="categorizedStocks"
             :is-categorizing="isCategorizing"
+            :is-canceling-categorization="isCancelingCategorization"
             @clickCheckStock="onClickCheckStock"
             @clickCancelCategorization="onClickCancelCategorization"
           />
@@ -102,6 +103,7 @@ import { Page, Category, CategorizedStock } from '@/domain/domain'
       'setIsCategorizing',
       'setIsCancelingCategorization',
       'categorize',
+      'cancelCategorization',
       'checkStock',
       'resetData'
     ])
@@ -118,6 +120,7 @@ export default class extends Vue {
   setIsCategorizing!: () => void
   setIsCancelingCategorization!: () => void
   categorize!: (categorizePayload: CategorizePayload) => void
+  cancelCategorization!: (categorizedStockId: number) => void
   checkStock!: (stock: CategorizedStock) => void
   resetData!: () => void
 
@@ -185,10 +188,17 @@ export default class extends Vue {
     }
   }
 
-  onClickCancelCategorization(categorizedStockId: number) {
-    // TODO カテゴライズ解除ボタン押下時の動作を追加
-    console.log(`${categorizedStockId} onClickCancelCategorization`)
-    // this.cancelCategorization(categorizedStockId);
+  async onClickCancelCategorization(categorizedStockId: number) {
+    try {
+      await this.cancelCategorization(categorizedStockId)
+    } catch (error) {
+      this.$router.push({
+        name: 'original_error',
+        params: {
+          message: error.message
+        }
+      })
+    }
   }
 
   onClickCheckStock(stock: CategorizedStock) {
