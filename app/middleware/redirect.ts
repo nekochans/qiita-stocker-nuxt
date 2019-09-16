@@ -4,7 +4,8 @@ export default function({ store, redirect, route }: any) {
     '/signup',
     '/privacy',
     '/terms',
-    '/cancel/complete'
+    '/cancel/complete',
+    '/error'
   ]
 
   if (notRequiredAuthorization.includes(route.path)) return
