@@ -19,6 +19,7 @@ export default class extends Vue {
   displayCategoryId!: number
 
   handleClick() {
+    if (this.isSelecting()) return
     this.$emit('clickStocksAll')
     this.$router.push({ path: '/stocks/all' })
   }
