@@ -25,8 +25,8 @@
             <div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">メニュー</a>
               <div class="navbar-dropdown is-right">
-                <nuxt-link class="navbar-item" to="/stocks/all"
-                  >ストック一覧</nuxt-link
+                <a class="navbar-item" @click="onClickStocksAll"
+                  >ストック一覧</a
                 >
                 <a class="navbar-item" @click="logout">ログアウト</a>
               </div>
@@ -44,19 +44,31 @@ import { mapGetters, mapActions } from '@/store/qiita'
 
 @Component({
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn', 'displayCategoryId'])
   },
   methods: {
-    ...mapActions(['logoutAction'])
+    ...mapActions(['logoutAction', 'resetData'])
   }
 })
 export default class AppHeader extends Vue {
   logoutAction!: () => void
+  resetData!: () => void
 
+  displayCategoryId!: number
   isMenuActive: boolean = false
 
   menuToggle() {
     this.isMenuActive = !this.isMenuActive
+  }
+
+  onClickStocksAll() {
+    if (this.isSelecting()) return
+    this.resetData()
+    this.$router.push({ path: '/stocks/all' })
+  }
+
+  isSelecting() {
+    return this.displayCategoryId === 0
   }
 
   async logout() {
