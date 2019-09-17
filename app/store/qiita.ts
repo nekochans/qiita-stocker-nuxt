@@ -355,6 +355,9 @@ export const actions: DefineActions<
       await cancelAccount()
       commit('saveSessionId', { sessionId: '' })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -392,6 +395,9 @@ export const actions: DefineActions<
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       commit('setIsLoading', { isLoading: false })
       return Promise.reject(error)
     }
@@ -438,6 +444,9 @@ export const actions: DefineActions<
       commit('saveCurrentPage', { currentPage: payload.page.page })
       commit('setIsLoading', { isLoading: false })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       commit('setIsLoading', { isLoading: false })
       return Promise.reject(error)
     }
@@ -447,6 +456,9 @@ export const actions: DefineActions<
       await logout()
       commit('saveSessionId', { sessionId: '' })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -469,6 +481,9 @@ export const actions: DefineActions<
 
       commit('addCategory', savedCategory)
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -485,6 +500,9 @@ export const actions: DefineActions<
 
       commit('saveCategories', { categories })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -514,6 +532,9 @@ export const actions: DefineActions<
         name: updateCategoryResponse.name
       })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -538,6 +559,9 @@ export const actions: DefineActions<
         commit('resetData', {})
       }
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -569,6 +593,9 @@ export const actions: DefineActions<
         category: categorizePayload.category
       })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -586,6 +613,9 @@ export const actions: DefineActions<
       await cancelCategorization(cancelCategorizationRequest)
       commit('removeCategorizedStocksById', { categorizedStockId })
     } catch (error) {
+      if (isUnauthorized(error.code)) {
+        commit('saveSessionId', { sessionId: '' })
+      }
       return Promise.reject(error)
     }
   },
@@ -613,3 +643,7 @@ export const {
   QiitaMutations,
   QiitaActions
 >('qiita')
+
+const isUnauthorized = (statusCode: number): boolean => {
+  return statusCode === 401
+}
