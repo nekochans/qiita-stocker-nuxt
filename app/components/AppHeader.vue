@@ -56,19 +56,20 @@ export default class AppHeader extends Vue {
 
   displayCategoryId!: number
   isMenuActive: boolean = false
+  isSelectingStocksAll: boolean = false
 
   menuToggle() {
     this.isMenuActive = !this.isMenuActive
   }
 
   onClickStocksAll() {
-    if (this.isSelecting()) return
+    if (this.isSelectingStocksAll) return
     this.resetData()
     this.$router.push({ path: '/stocks/all' })
   }
 
-  isSelecting() {
-    return this.displayCategoryId === 0
+  created() {
+    this.isSelectingStocksAll = this.$route.path === '/stocks/all'
   }
 
   async logout() {
