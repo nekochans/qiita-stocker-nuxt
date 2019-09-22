@@ -42,27 +42,16 @@ router.get('/callback', async (req: Request, res: Response) => {
     req.cookies[auth.COOKIE_AUTH_STATE] == null ||
     req.cookies[auth.COOKIE_AUTH_STATE] !== req.query.state
   ) {
-    return res
-      .status(400)
-      .send()
-      .end()
+    return res.redirect(auth.redirectAppErrorUrl())
   }
 
-  if (req.query.code == null) {
-    return res
-      .status(400)
-      .send()
-      .end()
-  }
+  if (req.query.code == null) return res.redirect(auth.redirectAppErrorUrl())
 
   if (
     req.cookies[auth.COOKIE_ACCOUNT_ACTION] !== 'signUp' &&
     req.cookies[auth.COOKIE_ACCOUNT_ACTION] !== 'login'
   ) {
-    return res
-      .status(400)
-      .send()
-      .end()
+    return res.redirect(auth.redirectAppErrorUrl())
   }
 
   try {
@@ -79,10 +68,7 @@ router.get('/callback', async (req: Request, res: Response) => {
 
     return res.redirect(auth.redirectAppUrl())
   } catch (error) {
-    return res
-      .status(400)
-      .send()
-      .end()
+    return res.redirect(auth.redirectAppErrorUrl())
   }
 })
 

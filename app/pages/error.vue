@@ -1,5 +1,5 @@
 <template>
-  <Error :message="message" />
+  <Error :message="displayMessage" />
 </template>
 
 <script lang="ts">
@@ -14,5 +14,16 @@ import Error from '@/components/pages/error.vue'
 export default class extends Vue {
   @Prop()
   message!: string
+
+  displayMessage: string = ''
+
+  created() {
+    if (this.message) {
+      this.displayMessage = this.message
+    } else {
+      this.displayMessage =
+        'エラーが発生しました。TOPページより再度行なってください。'
+    }
+  }
 }
 </script>

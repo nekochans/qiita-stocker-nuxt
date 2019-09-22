@@ -99,6 +99,10 @@ export const redirectAppUrl = (): string => {
   return `${appUrl()}/stocks/all`
 }
 
+export const redirectAppErrorUrl = (): string => {
+  return `${appUrl()}/error`
+}
+
 /**
  * @param authorizationCode
  * @param accountAction
