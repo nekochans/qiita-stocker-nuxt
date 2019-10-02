@@ -44,7 +44,7 @@ import { mapGetters, mapActions } from '@/store/qiita'
 
 @Component({
   computed: {
-    ...mapGetters(['isLoggedIn', 'displayCategoryId'])
+    ...mapGetters(['isLoggedIn'])
   },
   methods: {
     ...mapActions(['logoutAction', 'resetData'])
@@ -54,7 +54,6 @@ export default class AppHeader extends Vue {
   logoutAction!: () => void
   resetData!: () => void
 
-  displayCategoryId!: number
   isMenuActive: boolean = false
   isSelectingStocksAll: boolean = false
 
