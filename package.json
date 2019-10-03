@@ -67,6 +67,7 @@
     "prettier": "^1.17.1",
     "s3": "^4.4.0",
     "serverless": "^1.50.0",
+    "serverless-plugin-warmup": "^4.7.0-rc.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.2.0",
     "typescript": "^3.4.3",
