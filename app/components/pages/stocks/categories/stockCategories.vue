@@ -127,6 +127,8 @@ export default class extends Vue {
   checkedCategorizedStockArticleIds!: string[]
   categories!: Category[]
   displayCategoryId!: number
+  currentPage!: number
+  categorizedStocks!: CategorizedStock[]
 
   onClickCategory() {
     this.resetData()
@@ -191,6 +193,14 @@ export default class extends Vue {
   async onClickCancelCategorization(categorizedStockId: number) {
     try {
       await this.cancelCategorization(categorizedStockId)
+      if (!this.categorizedStocks.length && this.currentPage !== 1) {
+        this.resetData()
+        const fetchCategorizedStockPayload = {
+          page: { page: 0, perPage: 0, relation: '' },
+          categoryId: this.displayCategoryId
+        }
+        await this.fetchCategorizedStock(fetchCategorizedStockPayload)
+      }
     } catch (error) {
       this.$router.push({
         name: 'original_error',
