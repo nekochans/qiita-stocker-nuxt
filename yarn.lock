@@ -10452,6 +10452,13 @@ serverless-apigw-binary@^0.4.4:
   resolved "https://registry.yarnpkg.com/serverless-apigw-binary/-/serverless-apigw-binary-0.4.4.tgz#f3cffd8365322a2a1d8bde5fd94b306b7a64d4fb"
   integrity sha512-2DJmQTzeXa/+8u9ekReqf7j4gQjBtzQE4MK9nlOnEz4F7MVWCQXYlLPmf2TXSoxxJZzlWvIiNzCTq6vAT9F5FQ==
 
+serverless-plugin-warmup@^4.7.0-rc.1:
+  version "4.7.0-rc.1"
+  resolved "https://registry.yarnpkg.com/serverless-plugin-warmup/-/serverless-plugin-warmup-4.7.0-rc.1.tgz#92682b56605118fd41dda2b8b881ca2f44ab6dcd"
+  integrity sha512-iQO7rG89JOFhCVIaveKoaFqIo29wpgUlmRK94etEqC6yr7LzBhQnPyXJGBnETAIMDG8H4GZKXSCtYCVWlN2g4Q==
+  dependencies:
+    fs-extra "^8.0.1"
+
 serverless@^1.50.0:
   version "1.50.0"
   resolved "https://registry.yarnpkg.com/serverless/-/serverless-1.50.0.tgz#c85cca9fd6abfe2d5545066e84c73b8829a9a4fa"
