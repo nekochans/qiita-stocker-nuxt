@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { Context } from '@nuxt/types'
 import StockCategories from '@/components/pages/stocks/categories/stockCategories.vue'
-import { NuxtContext } from '@/types'
 import { FetchCategorizedStockPayload } from '@/store/qiita'
 
 @Component({
@@ -17,7 +17,7 @@ import { FetchCategorizedStockPayload } from '@/store/qiita'
   }
 })
 export default class extends Vue {
-  async fetch({ store, error, route }: NuxtContext) {
+  async fetch({ store, error, route }: Context) {
     try {
       const id = route.params.id
       const categoryId: number = parseInt(id)
