@@ -17,6 +17,10 @@ app.use(cookieParser())
 app.use('/api', router)
 app.use('/oauth', router)
 
-app.use(nuxt.render)
+app.use(async (req, res, next) => {
+  await nuxt.ready()
+  nuxt.render(req, res, next)
+})
+// app.use(nuxt.render)
 
 export default app
