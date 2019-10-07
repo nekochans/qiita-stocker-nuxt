@@ -1,4 +1,10 @@
-export default function({ store, redirect, route }: any) {
+import { Context, Middleware } from '@nuxt/types'
+
+const redirectMiddleware: Middleware = ({
+  store,
+  redirect,
+  route
+}: Context) => {
   const notRequiredAuthorization = [
     '/',
     '/signup',
@@ -18,3 +24,5 @@ export default function({ store, redirect, route }: any) {
     return redirect('/')
   }
 }
+
+export default redirectMiddleware
