@@ -50,7 +50,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Global CSS
    */
-  css: ['@fortawesome/fontawesome-free/css/all.css'],
+  css: ['@fortawesome/fontawesome-free/css/all.css', '@/assets/style.scss'],
 
   /*
    ** Plugins to load before mounting the App
@@ -60,11 +60,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma',
-    '@nuxtjs/markdownit'
-  ],
+  modules: ['@nuxtjs/markdownit'],
   markdownit: {
     injected: true,
     breaks: true,
