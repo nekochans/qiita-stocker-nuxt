@@ -4,7 +4,6 @@
   "description": "Mindexer Nuxt.js project",
   "private": true,
   "scripts": {
-    "dev:spa": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nuxt-ts",
     "dev": "cross-env NODE_ENV=development NUXT_HOST=127.0.0.1 NUXT_PORT=8080 nodemon",
     "build": "rm -rf .nuxt dist && tsc -p tsconfig.server.json && nuxt-ts build",
     "start": "cross-env NODE_ENV=production node dist/server/server.js",
