@@ -23,25 +23,36 @@ const client = s3.createClient({
   }
 })
 
-const params = {
-  localDir: path.join(__dirname, '/.nuxt/dist/client'),
-  deleteRemoved: true,
-  s3Params: {
-    Bucket: deployUtils.findDeployS3Bucket(deployStage),
-    Prefix: '_nuxt'
+const params = [
+  {
+    localDir: path.join(__dirname, '/.nuxt/dist/client'),
+    deleteRemoved: true,
+    s3Params: {
+      Bucket: deployUtils.findDeployS3Bucket(deployStage),
+      Prefix: '_nuxt'
+    }
+  },
+  {
+    localDir: path.join(__dirname, '/app/static'),
+    deleteRemoved: true,
+    s3Params: {
+      Bucket: deployUtils.findDeployS3Bucket(deployStage)
+    }
   }
+]
+
+for (const param of params) {
+  const uploader = client.uploadDir(param)
+
+  uploader.on('error', function(error) {
+    console.error('unable to sync:', error.stack)
+  })
+
+  uploader.on('progress', function() {
+    console.log('progress', uploader.progressAmount, uploader.progressTotal)
+  })
+
+  uploader.on('end', function() {
+    console.log('done uploading')
+  })
 }
-
-const uploader = client.uploadDir(params)
-
-uploader.on('error', function(error) {
-  console.error('unable to sync:', error.stack)
-})
-
-uploader.on('progress', function() {
-  console.log('progress', uploader.progressAmount, uploader.progressTotal)
-})
-
-uploader.on('end', function() {
-  console.log('done uploading')
-})

@@ -39,7 +39,7 @@ const nuxtConfig: Configuration = {
         content: 'Qiitaのストックを整理するためのサービスです'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/assets/favicon.ico' }]
   },
 
   /*
