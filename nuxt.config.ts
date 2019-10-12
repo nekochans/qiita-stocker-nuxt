@@ -30,7 +30,8 @@ const nuxtConfig: Configuration = {
    */
   head: {
     htmlAttrs: {
-      prefix: 'og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#'
+      prefix:
+        'og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#'
     },
     title: 'Mindexer | Qiitaのストックを整理するためのサービスです',
     meta: [
