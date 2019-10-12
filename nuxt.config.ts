@@ -59,7 +59,7 @@ const nuxtConfig: Configuration = {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: `https://${process.env.APP_URL}/assets/ogp.png`
+        content: `${process.env.APP_URL}/assets/ogp.png`
       },
       {
         hid: 'twitter:card',
