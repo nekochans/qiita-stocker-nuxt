@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Context } from '@nuxt/types'
-import StockCategories from '@/components/pages/stocks/categories/stockCategories.vue'
+import StockCategories from '@/components/pages/stocks/categories/StockCategories.vue'
 import { FetchCategorizedStockPayload } from '@/store/qiita'
 
 @Component({

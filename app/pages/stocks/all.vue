@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Context } from '@nuxt/types'
-import All from '@/components/pages/stocks/all.vue'
+import All from '@/components/pages/stocks/All.vue'
 
 @Component({
   layout: 'stocks',

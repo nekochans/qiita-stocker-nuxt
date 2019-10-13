@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Privacy from '@/components/pages/privacy.vue'
+import Privacy from '@/components/pages/Privacy.vue'
 
 @Component({
   components: {

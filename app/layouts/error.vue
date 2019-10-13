@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import Error from '@/components/pages/error.vue'
+import Error from '@/components/pages/Error.vue'
 
 @Component({
   components: {
