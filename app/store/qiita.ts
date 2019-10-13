@@ -379,16 +379,16 @@ export const actions: DefineActions<
         fetchStockRequest
       )
 
-      const uncategorizedStocks: UncategorizedStock[] = []
-      for (const fetchStock of response.stocks) {
+      let uncategorizedStocks: UncategorizedStock[] = []
+      response.stocks.map(fetchStock => {
         const date: string[] = fetchStock.stock.article_created_at.split(' ')
         fetchStock.stock.article_created_at = date[0]
         const uncategorizedStock: UncategorizedStock = Object.assign(
           fetchStock.stock,
           { isChecked: false, category: fetchStock.category }
         )
-        uncategorizedStocks.push(uncategorizedStock)
-      }
+        uncategorizedStocks = [...uncategorizedStocks, uncategorizedStock]
+      })
 
       commit('saveUncategorizedStocks', { uncategorizedStocks })
       commit('setIsLoading', { isLoading: false })
