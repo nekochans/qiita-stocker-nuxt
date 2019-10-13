@@ -215,12 +215,12 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   checkedStockArticleIds: (state): string[] => {
     return state.uncategorizedStocks
       .filter(stock => stock.isChecked)
-      .map(stock => stock.article_id)
+      .map(stock => stock.articleId)
   },
   checkedCategorizedStockArticleIds: (state): string[] => {
     return state.categorizedStocks
       .filter(categorizedStock => categorizedStock.isChecked)
-      .map(categorizedStock => categorizedStock.article_id)
+      .map(categorizedStock => categorizedStock.articleId)
   },
   displayCategoryId: (state): number => {
     return state.displayCategoryId
@@ -262,7 +262,7 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   removeCategorizedStocks: (state, { stockArticleIds }) => {
     state.categorizedStocks = state.categorizedStocks.filter(
-      categorizedStock => !stockArticleIds.includes(categorizedStock.article_id)
+      categorizedStock => !stockArticleIds.includes(categorizedStock.articleId)
     )
   },
   removeCategorizedStocksById: (state, { categorizedStockId }) => {
@@ -329,7 +329,7 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   updateStockCategory: (state, { stockArticleIds, category }) => {
     state.uncategorizedStocks.map(stock => {
-      if (stockArticleIds.includes(stock.article_id)) {
+      if (stockArticleIds.includes(stock.articleId)) {
         stock.category = category
       }
     })
@@ -381,8 +381,8 @@ export const actions: DefineActions<
 
       let uncategorizedStocks: UncategorizedStock[] = []
       response.stocks.map(fetchStock => {
-        const date: string[] = fetchStock.stock.article_created_at.split(' ')
-        fetchStock.stock.article_created_at = date[0]
+        const date: string[] = fetchStock.stock.articleCreatedAt.split(' ')
+        fetchStock.stock.articleCreatedAt = date[0]
         const uncategorizedStock: UncategorizedStock = Object.assign(
           fetchStock.stock,
           { isChecked: false, category: fetchStock.category }
@@ -431,8 +431,8 @@ export const actions: DefineActions<
 
       let categorizedStocks: CategorizedStock[] = []
       fetchCategorizedStockResponse.stocks.map(stock => {
-        const date: string[] = stock.article_created_at.split(' ')
-        stock.article_created_at = date[0]
+        const date: string[] = stock.articleCreatedAt.split(' ')
+        stock.articleCreatedAt = date[0]
         const categorizedStock: CategorizedStock = Object.assign(stock, {
           isChecked: false
         })

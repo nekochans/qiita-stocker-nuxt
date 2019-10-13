@@ -3,7 +3,7 @@
     <div v-if="stocks.length">
       <CategorizedStockItem
         v-for="stock in stocks"
-        :key="stock.article_id"
+        :key="stock.articleId"
         :stock="stock"
         :is-categorizing="isCategorizing"
         :is-canceling-categorization="isCancelingCategorization"
