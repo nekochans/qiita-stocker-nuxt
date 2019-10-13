@@ -429,15 +429,15 @@ export const actions: DefineActions<
         fetchCategorizedStockRequest
       )
 
-      const categorizedStocks: CategorizedStock[] = []
-      for (const stock of fetchCategorizedStockResponse.stocks) {
+      let categorizedStocks: CategorizedStock[] = []
+      fetchCategorizedStockResponse.stocks.map(stock => {
         const date: string[] = stock.article_created_at.split(' ')
         stock.article_created_at = date[0]
         const categorizedStock: CategorizedStock = Object.assign(stock, {
           isChecked: false
         })
-        categorizedStocks.push(categorizedStock)
-      }
+        categorizedStocks = [...categorizedStocks, categorizedStock]
+      })
 
       commit('saveCategorizedStocks', { categorizedStocks })
       commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
