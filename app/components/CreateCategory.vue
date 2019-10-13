@@ -17,16 +17,14 @@
         </p>
       </div>
       <div class="field">
-        <p class="control">
+        <p class="control flexbox">
           <button
             class="button is-small is-danger"
             @click="onClickSaveCategory"
           >
             カテゴリを追加
           </button>
-          <a class="has-text-grey is-size-7 cancel" @click="doneEdit"
-            >キャンセル</a
-          >
+          <a class="has-text-grey is-size-7" @click="doneEdit">キャンセル</a>
         </p>
       </div>
     </div>
@@ -76,7 +74,8 @@ export default class extends Vue {
 </script>
 
 <style scoped>
-.cancel {
-  float: right;
+.flexbox {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

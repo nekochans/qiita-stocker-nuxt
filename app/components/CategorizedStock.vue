@@ -104,7 +104,6 @@ a:hover {
 
 .times-circle {
   color: darkgray;
-  float: right;
   transition: color 0.2s ease-out;
   padding: 0.5rem;
 }

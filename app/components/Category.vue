@@ -12,12 +12,14 @@
       <div v-if="!editing">
         <a
           :data-category="category.categoryId"
-          :class="`${isSelecting && 'is-active'}`"
+          :class="`${isSelecting && 'is-active'} flexbox`"
           @click="onClickCategory"
         >
           {{ category.name }}
           <p class="edit" @click="editing = true">
-            <span class="icon"> <i class="fas fa-pencil-alt fa-lg"></i> </span>
+            <span class="icon edit-icon">
+              <i class="fas fa-pencil-alt fa-lg"></i>
+            </span>
           </p>
         </a>
       </div>
@@ -40,16 +42,14 @@
           </p>
         </div>
         <div class="edit-field">
-          <p class="control">
+          <p class="control flexbox">
             <button
               class="button is-small is-danger"
               @click="onClickUpdateCategory"
             >
               保存
             </button>
-            <a class="has-text-grey is-size-7 cancel" @click="doneEdit"
-              >キャンセル</a
-            >
+            <a class="has-text-grey is-size-7" @click="doneEdit">キャンセル</a>
           </p>
         </div>
       </div>
@@ -161,7 +161,6 @@ export default class extends Vue {
 
 <style scoped>
 .edit {
-  float: right;
   display: none;
   transition: color 0.2s ease-out;
 }
@@ -174,8 +173,13 @@ li:hover .edit {
   display: block;
 }
 
-.cancel {
-  float: right;
+.flexbox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit-icon {
+  display: contents;
 }
 
 .edit-field {
