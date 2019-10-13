@@ -29,6 +29,10 @@ const nuxtConfig: Configuration = {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      prefix:
+        'og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#'
+    },
     title: 'Mindexer | Qiitaのストックを整理するためのサービスです',
     meta: [
       { charset: 'utf-8' },
@@ -36,10 +40,46 @@ const nuxtConfig: Configuration = {
       {
         hid: 'description',
         name: 'description',
-        content: 'Qiitaのストックを整理するためのサービスです'
+        content:
+          'Mindexerは、Qiitaのストックにカテゴリ機能を追加したサービスです。'
+      },
+      { hid: 'og:url', property: 'og:url', content: `${process.env.APP_URL}` },
+      { hid: 'og:type', property: 'og:type', content: 'website' },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'Mindexer | Qiitaのストックを整理するためのサービスです'
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content:
+          'Mindexerは、Qiitaのストックにカテゴリ機能を追加したサービスです。'
+      },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'Mindexer' },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: `${process.env.APP_URL}/assets/ogp.png`
+      },
+      {
+        hid: 'twitter:card',
+        property: 'twitter:card',
+        content: 'summary_large_image'
+      },
+      {
+        hid: 'twitter:site',
+        property: 'twitter:site',
+        content: '@mindexer_org'
+      },
+
+      {
+        hid: 'google-site-verification',
+        property: 'google-site-verification',
+        content: `${process.env.GOOGLE_SITE_VERIFICATION}`
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/assets/favicon.ico' }]
   },
 
   /*
@@ -50,7 +90,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Global CSS
    */
-  css: ['@fortawesome/fontawesome-free/css/all.css'],
+  css: ['@fortawesome/fontawesome-free/css/all.css', '@/assets/style.scss'],
 
   /*
    ** Plugins to load before mounting the App
@@ -60,11 +100,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma',
-    '@nuxtjs/markdownit'
-  ],
+  modules: ['@nuxtjs/markdownit'],
   markdownit: {
     injected: true,
     breaks: true,
