@@ -1,6 +1,5 @@
 import express, { Router } from 'express'
 import cookieParser from 'cookie-parser'
-import weather from './api/weather'
 import qiita from './api/qiita'
 import oauth from './auth/oauth'
 import { nuxt } from './core/nuxt'
@@ -10,7 +9,6 @@ const router = Router()
 
 router.use(oauth)
 router.use(qiita)
-router.use(weather)
 
 app.use(cookieParser())
 // BFF
