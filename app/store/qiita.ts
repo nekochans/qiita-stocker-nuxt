@@ -379,15 +379,14 @@ export const actions: DefineActions<
         fetchStockRequest
       )
 
-      let uncategorizedStocks: UncategorizedStock[] = []
-      response.stocks.map(fetchStock => {
+      const uncategorizedStocks = response.stocks.map(fetchStock => {
         const date: string[] = fetchStock.stock.articleCreatedAt.split(' ')
         fetchStock.stock.articleCreatedAt = date[0]
         const uncategorizedStock: UncategorizedStock = Object.assign(
           fetchStock.stock,
           { isChecked: false, category: fetchStock.category }
         )
-        uncategorizedStocks = [...uncategorizedStocks, uncategorizedStock]
+        return uncategorizedStock
       })
 
       commit('saveUncategorizedStocks', { uncategorizedStocks })
@@ -429,15 +428,16 @@ export const actions: DefineActions<
         fetchCategorizedStockRequest
       )
 
-      let categorizedStocks: CategorizedStock[] = []
-      fetchCategorizedStockResponse.stocks.map(stock => {
-        const date: string[] = stock.articleCreatedAt.split(' ')
-        stock.articleCreatedAt = date[0]
-        const categorizedStock: CategorizedStock = Object.assign(stock, {
-          isChecked: false
-        })
-        categorizedStocks = [...categorizedStocks, categorizedStock]
-      })
+      const categorizedStocks = fetchCategorizedStockResponse.stocks.map(
+        stock => {
+          const date: string[] = stock.articleCreatedAt.split(' ')
+          stock.articleCreatedAt = date[0]
+          const categorizedStock: CategorizedStock = Object.assign(stock, {
+            isChecked: false
+          })
+          return categorizedStock
+        }
+      )
 
       commit('saveCategorizedStocks', { categorizedStocks })
       commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
