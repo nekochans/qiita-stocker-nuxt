@@ -99,7 +99,8 @@ import { Page, Category, UncategorizedStock } from '@/domain/domain'
       'setIsCategorizing',
       'categorize',
       'checkStock',
-      'resetData'
+      'resetData',
+      'setIsLoadingAction'
     ])
   }
 })
@@ -113,6 +114,7 @@ export default class extends Vue {
   categorize!: (categorizePayload: CategorizePayload) => void
   checkStock!: (stock: UncategorizedStock) => void
   resetData!: () => void
+  setIsLoadingAction!: (isLoading: boolean) => void
 
   checkedStockArticleIds!: string[]
   categories!: Category[]
@@ -124,6 +126,7 @@ export default class extends Vue {
   async fetchOtherPageStock(page: Page) {
     try {
       await this.fetchUncategorizedStocks(page)
+      this.setIsLoadingAction(false)
     } catch (error) {
       this.$router.push({
         name: 'original_error',

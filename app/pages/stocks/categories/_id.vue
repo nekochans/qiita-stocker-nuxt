@@ -8,15 +8,20 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Context } from '@nuxt/types'
 import StockCategories from '@/components/pages/stocks/categories/StockCategories.vue'
-import { FetchCategorizedStockPayload } from '@/store/qiita'
+import { FetchCategorizedStockPayload, mapActions } from '@/store/qiita'
 
 @Component({
   layout: 'stocks',
   components: {
     StockCategories
+  },
+  methods: {
+    ...mapActions(['setIsLoadingAction'])
   }
 })
 export default class extends Vue {
+  setIsLoadingAction!: (isLoading: boolean) => void
+
   async fetch({ store, error, route }: Context) {
     try {
       const id = route.params.id
@@ -37,6 +42,11 @@ export default class extends Vue {
         message: e.message
       })
     }
+  }
+
+  created() {
+    // 一瞬「ストックされた記事はありません。」と表示されてしまうのを防ぐためcreated内でLoadingをoffにしている
+    this.setIsLoadingAction(false)
   }
 }
 </script>
