@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Index from '@/components/pages/index.vue'
+import Index from '@/components/pages/Index.vue'
 
 @Component({
   components: {

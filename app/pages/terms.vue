@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Terms from '@/components/pages/terms.vue'
+import Terms from '@/components/pages/Terms.vue'
 
 @Component({
   components: {

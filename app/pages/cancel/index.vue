@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Cancel from '@/components/pages/cancel/index.vue'
+import Cancel from '@/components/pages/cancel/Index.vue'
 
 @Component({
   components: {

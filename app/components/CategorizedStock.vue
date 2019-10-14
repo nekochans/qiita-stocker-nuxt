@@ -1,25 +1,21 @@
 <template>
   <article class="media">
     <figure class="media-left">
-      <a class="image is-48x48" :href="`https://qiita.com/${stock.user_id}`">
-        <img :src="stock.profile_image_url" />
+      <a class="image is-48x48" :href="`https://qiita.com/${stock.userId}`">
+        <img :src="stock.profileImageUrl" />
       </a>
     </figure>
     <div class="media-content content-no-scroll">
       <div class="content">
         <div class="item-info">
           <p>
-            <a :href="`https://qiita.com/${stock.user_id}`">{{
-              stock.user_id
-            }}</a
-            >が{{ stock.article_created_at }}に投稿しました
+            <a :href="`https://qiita.com/${stock.userId}`">{{ stock.userId }}</a
+            >が{{ stock.articleCreatedAt }}に投稿しました
           </p>
         </div>
         <div class="item-title">
           <a
-            :href="
-              `https://qiita.com/${stock.user_id}/items/${stock.article_id}`
-            "
+            :href="`https://qiita.com/${stock.userId}/items/${stock.articleId}`"
             >{{ stock.title }}</a
           >
         </div>
@@ -104,7 +100,6 @@ a:hover {
 
 .times-circle {
   color: darkgray;
-  float: right;
   transition: color 0.2s ease-out;
   padding: 0.5rem;
 }

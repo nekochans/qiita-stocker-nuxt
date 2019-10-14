@@ -24,11 +24,11 @@ export type Category = {
 }
 
 export type Stock = {
-  article_id: string
+  articleId: string
   title: string
-  user_id: string
-  profile_image_url: string
-  article_created_at: string
+  userId: string
+  profileImageUrl: string
+  articleCreatedAt: string
   tags: string[]
 }
 

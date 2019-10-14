@@ -1,22 +1,30 @@
 import axios, { AxiosResponse } from 'axios'
 import {
-  QiitaStockerError,
-  QiitaStockApi,
-  Page,
-  FetchUncategorizedStockRequest,
-  FetchUncategorizedStockResponse,
-  FetchCategorizedStockRequest,
-  FetchCategorizedStockResponse,
   CancelCategorizationRequest,
-  SaveCategoryRequest,
-  SaveCategoryResponse,
+  CategorizeRequest,
+  DestroyCategoryRequest,
+  FetchedCategorizedStock,
   FetchCategoriesRequest,
   FetchCategoriesResponse,
+  FetchCategorizedStockRequest,
+  FetchCategorizedStockResponse,
+  FetchUncategorizedStockRequest,
+  FetchUncategorizedStockResponse,
+  Page,
+  QiitaStockApi,
+  QiitaStockerError,
+  SaveCategoryRequest,
+  SaveCategoryResponse,
+  Stock,
   UpdateCategoryRequest,
   UpdateCategoryResponse,
-  DestroyCategoryRequest,
-  CategorizeRequest
+  Category
 } from '@/domain/domain'
+
+import {
+  HttpUncategorizedStockResponse,
+  HttpCategorizedStockResponse
+} from '@/repositories/httpResponse'
 
 export default class Api implements QiitaStockApi {
   /**
@@ -115,7 +123,7 @@ export default class Api implements QiitaStockApi {
         const paging: Page[] = this.parseLinkHeader(linkHeader)
 
         const response: FetchUncategorizedStockResponse = {
-          stocks: axiosResponse.data,
+          stocks: this.convertStocks(axiosResponse.data),
           paging
         }
 
@@ -143,7 +151,7 @@ export default class Api implements QiitaStockApi {
         const paging: Page[] = this.parseLinkHeader(linkHeader)
 
         const response: FetchCategorizedStockResponse = {
-          stocks: axiosResponse.data,
+          stocks: this.convertCategorizedStocks(axiosResponse.data),
           paging
         }
 
@@ -264,5 +272,49 @@ export default class Api implements QiitaStockApi {
     }
 
     return paging
+  }
+
+  private convertStocks(
+    response: HttpUncategorizedStockResponse[]
+  ): { stock: Stock; category?: Category }[] {
+    return response.map(response => {
+      const uncategorizedStock: { stock: Stock; category?: Category } = {
+        stock: {
+          articleId: response.stock.article_id,
+          title: response.stock.title,
+          userId: response.stock.user_id,
+          profileImageUrl: response.stock.profile_image_url,
+          articleCreatedAt: response.stock.article_created_at,
+          tags: response.stock.tags
+        }
+      }
+
+      if (response.category) {
+        uncategorizedStock.category = {
+          categoryId: response.category.categoryId,
+          name: response.category.name
+        }
+      }
+
+      return uncategorizedStock
+    })
+  }
+
+  private convertCategorizedStocks(
+    response: HttpCategorizedStockResponse[]
+  ): FetchedCategorizedStock[] {
+    return response.map(response => {
+      const categorizedStock: FetchedCategorizedStock = {
+        id: response.id,
+        articleId: response.article_id,
+        title: response.title,
+        userId: response.user_id,
+        profileImageUrl: response.profile_image_url,
+        articleCreatedAt: response.article_created_at,
+        tags: response.tags
+      }
+
+      return categorizedStock
+    })
   }
 }

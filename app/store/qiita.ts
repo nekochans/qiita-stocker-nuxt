@@ -215,12 +215,12 @@ export const getters: DefineGetters<QiitaGetters, QiitaState> = {
   checkedStockArticleIds: (state): string[] => {
     return state.uncategorizedStocks
       .filter(stock => stock.isChecked)
-      .map(stock => stock.article_id)
+      .map(stock => stock.articleId)
   },
   checkedCategorizedStockArticleIds: (state): string[] => {
     return state.categorizedStocks
       .filter(categorizedStock => categorizedStock.isChecked)
-      .map(categorizedStock => categorizedStock.article_id)
+      .map(categorizedStock => categorizedStock.articleId)
   },
   displayCategoryId: (state): number => {
     return state.displayCategoryId
@@ -262,7 +262,7 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   removeCategorizedStocks: (state, { stockArticleIds }) => {
     state.categorizedStocks = state.categorizedStocks.filter(
-      categorizedStock => !stockArticleIds.includes(categorizedStock.article_id)
+      categorizedStock => !stockArticleIds.includes(categorizedStock.articleId)
     )
   },
   removeCategorizedStocksById: (state, { categorizedStockId }) => {
@@ -329,7 +329,7 @@ export const mutations: DefineMutations<QiitaMutations, QiitaState> = {
   },
   updateStockCategory: (state, { stockArticleIds, category }) => {
     state.uncategorizedStocks.map(stock => {
-      if (stockArticleIds.includes(stock.article_id)) {
+      if (stockArticleIds.includes(stock.articleId)) {
         stock.category = category
       }
     })
@@ -379,16 +379,15 @@ export const actions: DefineActions<
         fetchStockRequest
       )
 
-      const uncategorizedStocks: UncategorizedStock[] = []
-      for (const fetchStock of response.stocks) {
-        const date: string[] = fetchStock.stock.article_created_at.split(' ')
-        fetchStock.stock.article_created_at = date[0]
+      const uncategorizedStocks = response.stocks.map(fetchStock => {
+        const date: string[] = fetchStock.stock.articleCreatedAt.split(' ')
+        fetchStock.stock.articleCreatedAt = date[0]
         const uncategorizedStock: UncategorizedStock = Object.assign(
           fetchStock.stock,
           { isChecked: false, category: fetchStock.category }
         )
-        uncategorizedStocks.push(uncategorizedStock)
-      }
+        return uncategorizedStock
+      })
 
       commit('saveUncategorizedStocks', { uncategorizedStocks })
       commit('setIsLoading', { isLoading: false })
@@ -429,15 +428,16 @@ export const actions: DefineActions<
         fetchCategorizedStockRequest
       )
 
-      const categorizedStocks: CategorizedStock[] = []
-      for (const stock of fetchCategorizedStockResponse.stocks) {
-        const date: string[] = stock.article_created_at.split(' ')
-        stock.article_created_at = date[0]
-        const categorizedStock: CategorizedStock = Object.assign(stock, {
-          isChecked: false
-        })
-        categorizedStocks.push(categorizedStock)
-      }
+      const categorizedStocks = fetchCategorizedStockResponse.stocks.map(
+        stock => {
+          const date: string[] = stock.articleCreatedAt.split(' ')
+          stock.articleCreatedAt = date[0]
+          const categorizedStock: CategorizedStock = Object.assign(stock, {
+            isChecked: false
+          })
+          return categorizedStock
+        }
+      )
 
       commit('saveCategorizedStocks', { categorizedStocks })
       commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
