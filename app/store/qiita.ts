@@ -135,6 +135,7 @@ export interface QiitaActions {
   checkStock: UncategorizedStock
   saveDisplayCategoryId: number
   resetData: {}
+  setIsLoadingAction: boolean
 }
 
 export const state = (): QiitaState => ({
@@ -390,7 +391,6 @@ export const actions: DefineActions<
       })
 
       commit('saveUncategorizedStocks', { uncategorizedStocks })
-      commit('setIsLoading', { isLoading: false })
       commit('savePaging', { paging: response.paging })
       commit('saveCurrentPage', { currentPage: page.page })
     } catch (error) {
@@ -442,7 +442,6 @@ export const actions: DefineActions<
       commit('saveCategorizedStocks', { categorizedStocks })
       commit('savePaging', { paging: fetchCategorizedStockResponse.paging })
       commit('saveCurrentPage', { currentPage: payload.page.page })
-      commit('setIsLoading', { isLoading: false })
     } catch (error) {
       if (isUnauthorized(error.code)) {
         commit('saveSessionId', { sessionId: '' })
@@ -629,6 +628,9 @@ export const actions: DefineActions<
     commit('resetData', {})
     commit('saveUncategorizedStocks', { uncategorizedStocks: [] })
     commit('saveCategorizedStocks', { categorizedStocks: [] })
+  },
+  setIsLoadingAction: ({ commit }, isLoading): void => {
+    commit('setIsLoading', { isLoading })
   }
 }
 

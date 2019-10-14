@@ -105,7 +105,8 @@ import { Page, Category, CategorizedStock } from '@/domain/domain'
       'categorize',
       'cancelCategorization',
       'checkStock',
-      'resetData'
+      'resetData',
+      'setIsLoadingAction'
     ])
   }
 })
@@ -123,6 +124,7 @@ export default class extends Vue {
   cancelCategorization!: (categorizedStockId: number) => void
   checkStock!: (stock: CategorizedStock) => void
   resetData!: () => void
+  setIsLoadingAction!: (isLoading: boolean) => void
 
   checkedCategorizedStockArticleIds!: string[]
   categories!: Category[]
@@ -222,6 +224,7 @@ export default class extends Vue {
         categoryId: this.displayCategoryId
       }
       await this.fetchCategorizedStock(fetchCategorizedStockPayload)
+      this.setIsLoadingAction(false)
     } catch (error) {
       this.$router.push({
         name: 'original_error',
