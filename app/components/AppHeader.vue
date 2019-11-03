@@ -76,11 +76,9 @@ export default class AppHeader extends Vue {
       await this.logoutAction()
       this.$router.replace({ path: '/' })
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }

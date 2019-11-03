@@ -27,11 +27,9 @@ export default class extends Vue {
       await this.cancelAction()
       this.$router.replace({ path: 'cancel/complete' })
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
