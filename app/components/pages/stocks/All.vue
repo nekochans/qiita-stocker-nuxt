@@ -128,11 +128,9 @@ export default class extends Vue {
       await this.fetchUncategorizedStocks(page)
       this.setIsLoadingAction(false)
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
@@ -141,11 +139,9 @@ export default class extends Vue {
     try {
       await this.saveCategory(categoryName)
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
@@ -154,11 +150,9 @@ export default class extends Vue {
     try {
       await this.updateCategory(updateCategoryPayload)
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
@@ -167,11 +161,9 @@ export default class extends Vue {
     try {
       await this.destroyCategory(categoryId)
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
@@ -192,11 +184,9 @@ export default class extends Vue {
       }
       await this.categorize(categorizePayload)
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
@@ -209,11 +199,9 @@ export default class extends Vue {
     try {
       await this.fetchCategory()
     } catch (error) {
-      this.$router.push({
-        name: 'original_error',
-        params: {
-          message: error.message
-        }
+      return this.$nuxt.error({
+        statusCode: error.code,
+        message: error.message
       })
     }
   }
