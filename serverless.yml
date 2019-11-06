@@ -28,13 +28,7 @@ provider:
     TRACKING_ID: ${env:TRACKING_ID}
 
 plugins:
-  - serverless-apigw-binary
   - serverless-plugin-warmup
-
-custom:
-  apigwBinary:
-    types:
-      - '*/*'
 
 package:
   individually: true
